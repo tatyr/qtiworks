@@ -140,7 +140,7 @@ public final class AsciiMathHelper {
         ConstraintUtilities.ensureNotNull(asciiMathInput, "asciiMathInput");
 
         /* Run the ASCIIMathParser.js on the input */
-        final Document mathmlDocument = asciiMathParser.parseAsciiMath(asciiMathInput, asciiMathParserOptions);
+        final String mathmlDocument = asciiMathParser.parseAsciiMath(asciiMathInput, asciiMathParserOptions);
 
         /* Then attempt to up-convert the resulting PMathML */
         try {
