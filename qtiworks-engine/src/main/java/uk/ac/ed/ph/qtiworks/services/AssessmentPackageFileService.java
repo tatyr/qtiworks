@@ -212,7 +212,7 @@ public class AssessmentPackageFileService {
         final URI assessmentSystemId = createAssessmentObjectUri(assessmentPackage);
         XmlReadResult xmlReadResult;
         try {
-            xmlReadResult = qtiXmlReader.read(inputResourceLocator, assessmentSystemId, false);
+            xmlReadResult = qtiXmlReader.read(inputResourceLocator, assessmentSystemId, false, false);
         }
         catch (final XmlResourceNotFoundException e) {
             throw new QtiWorksLogicException("Assessment resource missing for package " + assessmentPackage, e);

@@ -65,7 +65,9 @@ public final class SimpleDomBuilderHandler extends DefaultHandler {
     /** Coalesces SAX character events */
     private final StringBuilder textNodeBuilder;
 
-    public SimpleDomBuilderHandler(Document document) {
+    private boolean recordLocation;
+
+    public SimpleDomBuilderHandler(final Document document) {
         this.document = document;
         this.locator = null;
         this.currentNode = null;
@@ -73,29 +75,39 @@ public final class SimpleDomBuilderHandler extends DefaultHandler {
     }
 
     @Override
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
     }
 
-    @Override
+    public boolean isRecordLocation() {
+		return recordLocation;
+	}
+
+	public void setRecordLocation(final boolean recordLocation) {
+		this.recordLocation = recordLocation;
+	}
+
+	@Override
     public void startDocument() {
         currentNode = document;
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
         addAnyCoalescedText();
         final Element newElement = document.createElementNS(uri, qName);
         for (int i = 0, length = attributes.getLength(); i < length; i++) {
             newElement.setAttributeNS(attributes.getURI(i), attributes.getQName(i), attributes.getValue(i));
         }
-        storeLocationInformation(newElement);
+        if(recordLocation) {
+        	storeLocationInformation(newElement);
+        }
         currentNode.appendChild(newElement);
         currentNode = newElement;
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
+    public void characters(final char[] ch, final int start, final int length) {
         /* (Coalesce adjacent runs of characters together. This often happens when using NCRs or entities) */
         if (currentNode == null) {
             throw new IllegalStateException("Inconsistent state at characters: currentNode==null");
@@ -104,7 +116,7 @@ public final class SimpleDomBuilderHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) {
+    public void endElement(final String uri, final String localName, final String qName) {
         if (currentNode == null) {
             throw new IllegalStateException("Inconsistent state at endElement: currentNode==null");
         }
@@ -115,7 +127,9 @@ public final class SimpleDomBuilderHandler extends DefaultHandler {
     private void addAnyCoalescedText() {
         if (textNodeBuilder.length()>0) {
             final Text textNode = document.createTextNode(textNodeBuilder.toString());
-            storeLocationInformation(textNode);
+            if(recordLocation) {
+            	storeLocationInformation(textNode);
+            }
             currentNode.appendChild(textNode);
             textNodeBuilder.setLength(0);
         }
@@ -131,7 +145,7 @@ public final class SimpleDomBuilderHandler extends DefaultHandler {
         }
     }
 
-    private void storeLocationInformation(Node node) {
+    private void storeLocationInformation(final Node node) {
         if (locator != null) {
             final XmlSourceLocationInformation info = new XmlSourceLocationInformation(locator.getPublicId(), locator.getSystemId(), locator.getColumnNumber(),
                     locator.getLineNumber());

@@ -35,7 +35,6 @@ package uk.ac.ed.ph.jqtiplus.serialization;
 
 import uk.ac.ed.ph.jqtiplus.JqtiExtensionManager;
 import uk.ac.ed.ph.jqtiplus.node.QtiNode;
-import uk.ac.ed.ph.jqtiplus.xmlutils.SimpleDomBuilderHandler;
 import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.QtiSerializationException;
 import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltSerializationOptions;
 import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltStylesheetManager;
@@ -43,13 +42,9 @@ import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltStylesheetManager;
 import java.io.OutputStream;
 import java.io.StringWriter;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
@@ -103,29 +98,5 @@ public final class QtiSerializer {
         catch (final SAXException e) {
             throw new QtiSerializationException("Unexpected Exception firing QTI Object SAX events at serializer stylesheet", e);
         }
-    }
-
-    public Document serializeJqtiObjectAsDocument(final QtiNode jqtiObject, final SaxFiringOptions saxFiringOptions) {
-        /* Create DOM Document */
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        dbFactory.setNamespaceAware(true);
-        DocumentBuilder documentBuilder;
-        try {
-            documentBuilder = dbFactory.newDocumentBuilder();
-        }
-        catch (final ParserConfigurationException e) {
-            throw new QtiSerializationException("Could not create namespace aware DocumentBuilder");
-        }
-        final Document document = documentBuilder.newDocument();
-        final SimpleDomBuilderHandler domBuilderHandler = new SimpleDomBuilderHandler(document);
-
-        final QtiSaxDocumentFirer qtiSaxDocumentFirer = new QtiSaxDocumentFirer(jqtiExtensionManager, domBuilderHandler, saxFiringOptions);
-        try {
-            qtiSaxDocumentFirer.fireSaxDocument(jqtiObject);
-        }
-        catch (final SAXException e) {
-            throw new QtiSerializationException("Unexpected Exception firing QTI Object SAX events at serializer stylesheet", e);
-        }
-        return document;
     }
 }

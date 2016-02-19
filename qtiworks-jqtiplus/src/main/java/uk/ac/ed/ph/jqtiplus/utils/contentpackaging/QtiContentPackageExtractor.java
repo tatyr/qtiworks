@@ -152,7 +152,7 @@ public final class QtiContentPackageExtractor {
         /* Attempt to parse the manifest XML */
         final URI manifestSystemId = PACKAGE_URI_SCHEME.decodedPathToUri(manifestHref);
         logger.debug("Reading manifest file at system ID {} using locator {}", manifestSystemId, packageResourceLocator);
-        final XmlReadResult xmlReadResult = xmlResourceReader.read(manifestSystemId, packageResourceLocator, packageResourceLocator, false);
+        final XmlReadResult xmlReadResult = xmlResourceReader.read(manifestSystemId, packageResourceLocator, packageResourceLocator, false, false);
         final XmlParseResult xmlParseResult = xmlReadResult.getXmlParseResult();
 
         /* If successful, extract information from the DOM */

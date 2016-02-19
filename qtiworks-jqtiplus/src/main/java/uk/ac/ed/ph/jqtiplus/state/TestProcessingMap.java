@@ -84,14 +84,14 @@ public final class TestProcessingMap implements Serializable {
      * looked up (but not necessarily valid), keyed on the resolved System ID of the
      * {@link AssessmentItemRef} referring to it.
      */
-    private final Map<URI, ItemProcessingMap> itemProcessingMapMap;
+    private Map<URI, ItemProcessingMap> itemProcessingMapMap;
 
     public TestProcessingMap(final ResolvedAssessmentTest resolvedAssessmentTest, final boolean isValid,
             final List<AbstractPart> abstractPartListBuilder,
             final Map<AbstractPart, EffectiveItemSessionControl> effectiveItemSessionControlMap,
             final Map<Identifier, OutcomeDeclaration> outcomeDeclarationMapBuilder,
             final ResponseDeclaration durationResponseDeclaration,
-            final Map<URI, ItemProcessingMap> itemProcessingMapMapBuilder) {
+            final LinkedHashMap<URI, ItemProcessingMap> itemProcessingMapMapBuilder) {
         this.resolvedAssessmentTest = resolvedAssessmentTest;
         this.durationResponseDeclaration = durationResponseDeclaration;
         this.isValid = isValid;
@@ -110,7 +110,7 @@ public final class TestProcessingMap implements Serializable {
         this.validOutcomeDeclarationMap = Collections.unmodifiableMap(new LinkedHashMap<Identifier, OutcomeDeclaration>(outcomeDeclarationMapBuilder));
 
         /* Record maps for each referenced item */
-        this.itemProcessingMapMap = Collections.unmodifiableMap(new LinkedHashMap<URI, ItemProcessingMap>(itemProcessingMapMapBuilder));
+        this.itemProcessingMapMap = new LinkedHashMap<URI, ItemProcessingMap>(itemProcessingMapMapBuilder);
     }
 
     public boolean isValid() {
@@ -129,6 +129,8 @@ public final class TestProcessingMap implements Serializable {
         final Integer result = abstractPartToGlobalIndexMap.get(abstractPart);
         return result!=null ? result.intValue() : -1;
     }
+
+
 
 
     public Map<AbstractPart, EffectiveItemSessionControl> getEffectiveItemSessionControlMap() {
@@ -169,6 +171,19 @@ public final class TestProcessingMap implements Serializable {
         }
         final AbstractPart abstractPart = resolveAbstractPart(testPlanNode);
         return effectiveItemSessionControlMap.get(abstractPart);
+    }
+
+    public void reduceItemProcessingMapMap(final List<TestPlanNode> testPlanNodes) {
+    	final Map<URI, ItemProcessingMap> reducedItemProcessingMapMapBuilder = new LinkedHashMap<URI, ItemProcessingMap>();
+
+    	for(final TestPlanNode testPlanNode:testPlanNodes) {
+    		if (testPlanNode.getTestNodeType() == TestNodeType.ASSESSMENT_ITEM_REF) {
+    			final ItemProcessingMap itemProcessingMap = resolveItemProcessingMap(testPlanNode);
+    			final URI uri = itemProcessingMap.getResolvedAssessmentItem().getItemLookup().getSystemId();
+    			reducedItemProcessingMapMapBuilder.put(uri, itemProcessingMap);
+    		}
+    	}
+    	this.itemProcessingMapMap = Collections.unmodifiableMap(reducedItemProcessingMapMapBuilder);
     }
 
     public ItemProcessingMap resolveItemProcessingMap(final TestPlanNode testPlanNode) {

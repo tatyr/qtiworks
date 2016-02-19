@@ -119,11 +119,11 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected XmlReadResult readSampleXml() throws Exception {
-        return sampleXmlReader.read(sampleResourceLocator, sampleResourceUri, true);
+        return sampleXmlReader.read(sampleResourceLocator, sampleResourceUri, true, true);
     }
 
     protected QtiObjectReader createSampleQtiObjectReader(final boolean schemaValidating) {
-        return sampleXmlReader.createQtiObjectReader(sampleResourceLocator, schemaValidating);
+        return sampleXmlReader.createQtiObjectReader(sampleResourceLocator, schemaValidating, true);
     }
 
     protected AssessmentObjectXmlLoader createSampleAssessmentXmlLoader() {

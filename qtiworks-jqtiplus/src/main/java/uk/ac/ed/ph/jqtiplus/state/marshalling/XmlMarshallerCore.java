@@ -50,6 +50,7 @@ import uk.ac.ed.ph.jqtiplus.value.OrderedValue;
 import uk.ac.ed.ph.jqtiplus.value.RecordValue;
 import uk.ac.ed.ph.jqtiplus.value.SingleValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
+import uk.ac.ed.ph.jqtiplus.xmlutils.XmlFactories;
 
 import java.io.File;
 import java.net.URI;
@@ -65,7 +66,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
@@ -492,9 +492,7 @@ public final class XmlMarshallerCore {
 
     static final DocumentBuilder createNsAwareDocumentBuilder() {
         try {
-            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            documentBuilderFactory.setNamespaceAware(true);
-            return documentBuilderFactory.newDocumentBuilder();
+            return XmlFactories.newDocumentBuilder();
         }
         catch (final ParserConfigurationException e) {
             throw new QtiLogicException("Could not create NS Aware DocumentBuilder. Check deployment/runtime ClassPath", e);

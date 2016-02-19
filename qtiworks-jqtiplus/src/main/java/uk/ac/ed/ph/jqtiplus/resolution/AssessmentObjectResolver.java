@@ -43,9 +43,10 @@ import uk.ac.ed.ph.jqtiplus.utils.QueryUtils;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,9 +151,9 @@ public final class AssessmentObjectResolver {
 
     private ResolvedAssessmentTest initResolvedAssessmentTest(final RootNodeLookup<AssessmentTest> testLookup, final CachedResourceProvider cachedResourceProvider) {
         final List<AssessmentItemRef> assessmentItemRefs = new ArrayList<AssessmentItemRef>();
-        final Map<AssessmentItemRef, URI> systemIdByItemRefMap = new LinkedHashMap<AssessmentItemRef, URI>();
-        final Map<URI, List<AssessmentItemRef>> itemRefsBySystemIdMap = new LinkedHashMap<URI, List<AssessmentItemRef>>();
-        final Map<URI, ResolvedAssessmentItem> resolvedAssessmentItemMap = new LinkedHashMap<URI, ResolvedAssessmentItem>();
+        final Map<AssessmentItemRef, URI> systemIdByItemRefMap = new HashMap<AssessmentItemRef, URI>();
+        final Map<URI, List<AssessmentItemRef>> itemRefsBySystemIdMap = new HashMap<URI, List<AssessmentItemRef>>();
+        final Map<URI, ResolvedAssessmentItem> resolvedAssessmentItemMap = new ConcurrentHashMap<URI, ResolvedAssessmentItem>();
 
         /* Look up test */
         if (testLookup.wasSuccessful()) {
@@ -167,17 +168,23 @@ public final class AssessmentObjectResolver {
                     systemIdByItemRefMap.put(itemRef, itemSystemId);
                     List<AssessmentItemRef> itemRefs = itemRefsBySystemIdMap.get(itemSystemId);
                     if (itemRefs==null) {
-                        itemRefs = new ArrayList<AssessmentItemRef>();
+                        itemRefs = new ArrayList<AssessmentItemRef>(1);
                         itemRefsBySystemIdMap.put(itemSystemId, itemRefs);
                     }
                     itemRefs.add(itemRef);
                 }
             }
 
-            /* Resolve each unique item */
+            itemRefsBySystemIdMap.keySet().parallelStream().forEach((itemSystemId) -> {
+            	final ResolvedAssessmentItem item = resolveAssessmentItem(itemSystemId, cachedResourceProvider);
+                resolvedAssessmentItemMap.put(itemSystemId, item);
+            });
+
+            /* Resolve each unique item
             for (final URI itemSystemId : itemRefsBySystemIdMap.keySet()) {
-                resolvedAssessmentItemMap.put(itemSystemId, resolveAssessmentItem(itemSystemId, cachedResourceProvider));
-            }
+            	//final ResolvedAssessmentItem item = resolveAssessmentItem(itemSystemId, cachedResourceProvider);
+                //resolvedAssessmentItemMap.put(itemSystemId, item);
+            }*/
         }
         return new ResolvedAssessmentTest(testLookup, assessmentItemRefs,
                 systemIdByItemRefMap, itemRefsBySystemIdMap, resolvedAssessmentItemMap);

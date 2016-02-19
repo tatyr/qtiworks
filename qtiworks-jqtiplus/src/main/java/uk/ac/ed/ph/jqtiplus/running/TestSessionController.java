@@ -81,7 +81,6 @@ import uk.ac.ed.ph.jqtiplus.value.Value;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -130,20 +129,13 @@ public final class TestSessionController extends TestProcessingController {
 
     private static final Logger logger = LoggerFactory.getLogger(TestSessionController.class);
 
-    private final TestProcessingMap testProcessingMap;
-    private final TestSessionState testSessionState;
 
-    /** NB: These are created lazily */
-    private final Map<TestPlanNodeKey, ItemSessionController> itemSessionControllerMap;
 
     public TestSessionController(final JqtiExtensionManager jqtiExtensionManager,
             final TestSessionControllerSettings testSessionControllerSettings,
             final TestProcessingMap testProcessingMap,
             final TestSessionState testSessionState) {
         super(jqtiExtensionManager, testSessionControllerSettings, testProcessingMap, testSessionState);
-        this.testProcessingMap = testProcessingMap;
-        this.testSessionState = testSessionState;
-        this.itemSessionControllerMap = new HashMap<TestPlanNodeKey, ItemSessionController>();
     }
 
     //-------------------------------------------------------------------
@@ -175,9 +167,6 @@ public final class TestSessionController extends TestProcessingController {
      */
     public void initialize(final Date timestamp) {
         Assert.notNull(timestamp, "timestamp");
-
-        /* Clear existing ItemSessionController map */
-        itemSessionControllerMap.clear();
 
         /* Reset test variables */
         testSessionState.reset();

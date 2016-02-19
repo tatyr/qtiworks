@@ -49,9 +49,7 @@ import java.util.Map;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -178,7 +176,7 @@ public final class XmlResourceReader {
      *             if any of the required schemas could not be located.
      */
     public XmlReadResult read(final URI systemId, final ResourceLocator inputResourceLocator,
-            final ResourceLocator entityResourceLocator, final boolean schemaValidating)
+            final ResourceLocator entityResourceLocator, final boolean schemaValidating, final boolean recordLocation)
             throws XmlResourceNotFoundException {
         Assert.notNull(systemId, "systemId");
         Assert.notNull(inputResourceLocator, "inputResourceLocator");
@@ -186,7 +184,7 @@ public final class XmlResourceReader {
 
         try {
             logger.debug("read({}, {}, {}, {}) starting", new Object[] { systemId, inputResourceLocator, entityResourceLocator, schemaValidating });
-            final XmlReadResult result = doRead(systemId, inputResourceLocator, entityResourceLocator, schemaValidating);
+            final XmlReadResult result = doRead(systemId, inputResourceLocator, entityResourceLocator, schemaValidating, recordLocation);
             logger.debug("read({}, {}, {}, {}) => {}", new Object[] { systemId, inputResourceLocator, entityResourceLocator, schemaValidating, result });
             return result;
         }
@@ -204,7 +202,7 @@ public final class XmlResourceReader {
     }
 
     private XmlReadResult doRead(final URI systemId, final ResourceLocator inputResourceLocator,
-            final ResourceLocator entityResourceLocator, final boolean schemaValidating)
+            final ResourceLocator entityResourceLocator, final boolean schemaValidating, final boolean recordLocation)
             throws XmlResourceNotFoundException, ParserConfigurationException, SAXException, IOException {
         final String systemIdString = systemId.toString();
         boolean parsed = false;
@@ -213,27 +211,13 @@ public final class XmlResourceReader {
         final List<String> unsupportedSchemaNamespaces = new ArrayList<String>();
 
         final InputErrorHandler inputErrorHandler = new InputErrorHandler();
-
-        /* Create the DOM Document that will be built up here */
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        dbFactory.setNamespaceAware(true);
-        final DocumentBuilder documentBuilder = dbFactory.newDocumentBuilder();
+        final DocumentBuilder documentBuilder = XmlFactories.newDocumentBuilder();
         documentBuilder.setErrorHandler(inputErrorHandler);
         final Document document = documentBuilder.newDocument();
 
         /* Set up SAX EntityResolver, which will record locator failures appropriately */
         final FailureEntityResolver failureEntityResolver = new FailureEntityResolver(entityResourceLocator);
-
-        /* Create and configure SAX parser */
-        final SAXParserFactory spFactory = SAXParserFactory.newInstance();
-        spFactory.setNamespaceAware(true);
-        spFactory.setValidating(false);
-        spFactory.setXIncludeAware(true);
-        spFactory.setFeature("http://xml.org/sax/features/validation", false);
-        spFactory.setFeature("http://xml.org/sax/features/external-general-entities", true);
-        spFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", true);
-        spFactory.setFeature("http://xml.org/sax/features/lexical-handler/parameter-entities", false);
-        final XMLReader xmlReader = spFactory.newSAXParser().getXMLReader();
+        final XMLReader xmlReader = XmlFactories.newSAXParser().getXMLReader();
         xmlReader.setErrorHandler(inputErrorHandler);
         xmlReader.setEntityResolver(failureEntityResolver);
 
@@ -244,6 +228,7 @@ public final class XmlResourceReader {
         inputSource.setSystemId(systemIdString);
 
         final SimpleDomBuilderHandler handler = new SimpleDomBuilderHandler(document);
+        handler.setRecordLocation(recordLocation);
         xmlReader.setContentHandler(handler);
         try {
             xmlReader.parse(inputSource); /* Fatal errors will cause SAXParseException */

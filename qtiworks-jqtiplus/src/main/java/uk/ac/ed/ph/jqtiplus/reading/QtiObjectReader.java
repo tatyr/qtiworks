@@ -81,11 +81,13 @@ public final class QtiObjectReader implements RootNodeProvider {
     private final QtiXmlReader qtiXmlReader;
     private final ResourceLocator inputResourceLocator;
     private final boolean schemaValidating;
+    private final boolean recordLocation;
 
-    QtiObjectReader(final QtiXmlReader qtiXmlReader, final ResourceLocator inputResourceLocator, final boolean schemaValidating) {
+    QtiObjectReader(final QtiXmlReader qtiXmlReader, final ResourceLocator inputResourceLocator, final boolean schemaValidating, final boolean recordLocation) {
         this.qtiXmlReader = qtiXmlReader;
         this.inputResourceLocator = inputResourceLocator;
         this.schemaValidating = schemaValidating;
+        this.recordLocation = recordLocation;
     }
 
     public QtiXmlReader getQtiXmlReader() {
@@ -156,7 +158,7 @@ public final class QtiObjectReader implements RootNodeProvider {
         final ChainedResourceLocator resourceLocator = new ChainedResourceLocator(QtiXmlReader.JQTIPLUS_PARSER_RESOURCE_LOCATOR, inputResourceLocator);
 
         /* Parse XML */
-        final XmlReadResult xmlReadResult = qtiXmlReader.read(resourceLocator, systemId, schemaValidating);
+        final XmlReadResult xmlReadResult = qtiXmlReader.read(resourceLocator, systemId, schemaValidating, recordLocation);
         final XmlParseResult xmlParseResult = xmlReadResult.getXmlParseResult();
         final Document document = xmlReadResult.getDocument();
         if (document==null) {

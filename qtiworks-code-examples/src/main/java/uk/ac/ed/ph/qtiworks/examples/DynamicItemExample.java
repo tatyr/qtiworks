@@ -90,7 +90,7 @@ public final class DynamicItemExample {
         /* Validate */
         final JqtiExtensionManager jqtiExtensionManager = new JqtiExtensionManager();
         final QtiXmlReader qtiXmlReader = new QtiXmlReader(jqtiExtensionManager);
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(NullResourceLocator.getInstance(), false);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(NullResourceLocator.getInstance(), false, true);
         final AssessmentObjectResolver resolver = new AssessmentObjectResolver(qtiObjectReader);
         final ResolvedAssessmentItem resolvedAssessmentItem = resolver.resolveAssessmentItem(assessmentItem);
         final AssessmentObjectValidator validator = new AssessmentObjectValidator(jqtiExtensionManager);

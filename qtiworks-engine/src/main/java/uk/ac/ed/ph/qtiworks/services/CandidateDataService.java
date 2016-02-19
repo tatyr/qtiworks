@@ -423,6 +423,8 @@ public class CandidateDataService {
         }
         final TestPlan testPlan = testPlanner.generateTestPlan();
 
+        testProcessingMap.reduceItemProcessingMapMap(testPlan.getTestPlanNodeList());
+
         /* Create fresh state for session */
         final TestSessionState testSessionState = new TestSessionState(testPlan);
 

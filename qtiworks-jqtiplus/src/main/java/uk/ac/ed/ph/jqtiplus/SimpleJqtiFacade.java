@@ -123,7 +123,7 @@ public final class SimpleJqtiFacade {
     public XmlReadResult readQtiXml(final ResourceLocator inputResourceLocator, final URI systemId,
             final boolean performSchemaValidation)
             throws XmlResourceNotFoundException {
-        return qtiXmlReader.read(inputResourceLocator, systemId, performSchemaValidation);
+        return qtiXmlReader.read(inputResourceLocator, systemId, performSchemaValidation, true);
     }
 
     /**
@@ -146,7 +146,7 @@ public final class SimpleJqtiFacade {
     public QtiObjectReadResult<RootNode> readQtiRootNode(final ResourceLocator inputResourceLocator,
             final URI systemId, final boolean performSchemaValidation)
             throws XmlResourceNotFoundException, QtiXmlInterpretationException {
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, performSchemaValidation);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, performSchemaValidation, true);
         return qtiObjectReader.lookupRootNode(systemId);
     }
 
@@ -172,7 +172,7 @@ public final class SimpleJqtiFacade {
     public <E extends RootNode> QtiObjectReadResult<E> readQtiRootNode(final ResourceLocator inputResourceLocator,
             final URI systemId, final boolean performSchemaValidation, final Class<E> requiredRootNodeClass)
             throws XmlResourceNotFoundException, QtiXmlInterpretationException {
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, performSchemaValidation);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, performSchemaValidation, true);
         return qtiObjectReader.lookupRootNode(systemId, requiredRootNodeClass);
     }
 

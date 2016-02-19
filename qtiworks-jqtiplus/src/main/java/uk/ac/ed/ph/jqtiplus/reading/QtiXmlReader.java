@@ -137,21 +137,22 @@ public final class QtiXmlReader {
      *             if any of the required schemas could not be located.
      */
     public XmlReadResult read(final ResourceLocator inputResourceLocator, final URI systemId,
-            final boolean performSchemaValidation)
+            final boolean performSchemaValidation, final boolean recordLocation)
             throws XmlResourceNotFoundException {
         Assert.notNull(inputResourceLocator, "inputResourceLocator");
         Assert.notNull(systemId, "systemId");
         final ResourceLocator entityResourceLocator = new ChainedResourceLocator(JQTIPLUS_PARSER_RESOURCE_LOCATOR, inputResourceLocator);
-        return xmlResourceReader.read(systemId, inputResourceLocator, entityResourceLocator, performSchemaValidation);
+        return xmlResourceReader.read(systemId, inputResourceLocator, entityResourceLocator, performSchemaValidation, recordLocation);
     }
 
     /**
      * Creates a new {@link QtiObjectReader} from this reader and the given
      * input {@link ResourceLocator}.
      */
-    public QtiObjectReader createQtiObjectReader(final ResourceLocator inputResourceLocator, final boolean schemaValidating) {
+    public QtiObjectReader createQtiObjectReader(final ResourceLocator inputResourceLocator,
+    		final boolean schemaValidating, final boolean recordLocation) {
         Assert.notNull(inputResourceLocator, "inputResourceLocator");
-        return new QtiObjectReader(this, inputResourceLocator, schemaValidating);
+        return new QtiObjectReader(this, inputResourceLocator, schemaValidating, recordLocation);
     }
 
     //--------------------------------------------------

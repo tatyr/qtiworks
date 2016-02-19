@@ -94,7 +94,7 @@ public final class LoadModifyAndSaveQtiExample2 {
          */
         final JqtiExtensionManager jqtiExtensionManager = new JqtiExtensionManager();
         final QtiXmlReader qtiXmlReader = new QtiXmlReader(jqtiExtensionManager);
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, true /* = perform schema validation */);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, true /* = perform schema validation */, true);
         QtiObjectReadResult<AssessmentItem> readResult;
         try {
             readResult = qtiObjectReader.lookupRootNode(inputUri, AssessmentItem.class);

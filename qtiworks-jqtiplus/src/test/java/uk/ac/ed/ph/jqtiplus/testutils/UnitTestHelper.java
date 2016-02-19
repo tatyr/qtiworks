@@ -93,7 +93,7 @@ public final class UnitTestHelper {
     }
 
     public static QtiObjectReader createUnitTestQtiObjectReader(final boolean schemaValidating) {
-        return createUnitTestQtiXmlReader().createQtiObjectReader(createTestFileResourceLocator(), schemaValidating);
+        return createUnitTestQtiXmlReader().createQtiObjectReader(createTestFileResourceLocator(), schemaValidating, true);
     }
 
     public static AssessmentObjectXmlLoader createUnitTestAssessmentObjectXmlLoader() {
@@ -105,7 +105,7 @@ public final class UnitTestHelper {
         final QtiXmlReader reader = createUnitTestQtiXmlReader();
         final URI testFileUri = createTestResourceUri(testFilePath);
         try {
-            return reader.read(createTestFileResourceLocator(), testFileUri, schemaValiadating);
+            return reader.read(createTestFileResourceLocator(), testFileUri, schemaValiadating, true);
         }
         catch (final XmlResourceNotFoundException e) {
             /* Should not happen! */

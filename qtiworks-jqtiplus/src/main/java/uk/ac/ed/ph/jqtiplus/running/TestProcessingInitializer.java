@@ -126,7 +126,7 @@ public final class TestProcessingInitializer {
         }
 
         /* Now repeat this for each resolved item that was successfully looked up */
-        final Map<URI, ItemProcessingMap> itemProcessingMapBuilder = new LinkedHashMap<URI, ItemProcessingMap>();
+        final LinkedHashMap<URI, ItemProcessingMap> itemProcessingMapBuilder = new LinkedHashMap<URI, ItemProcessingMap>();
         if (testValidationResult!=null) {
             /* This initializer was built from validation result, so we can be quite fine grained */
             for (final ItemValidationResult itemValidationResult : testValidationResult.getItemValidationResults()) {

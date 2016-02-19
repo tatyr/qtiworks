@@ -78,13 +78,13 @@ public final class AssessmentObjectXmlLoader {
     // AssessmentItem resolution & validation
 
     public ResolvedAssessmentItem loadAndResolveAssessmentItem(final URI systemId) {
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, false);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, false, false);
         final AssessmentObjectResolver assessmentObjectResolver = new AssessmentObjectResolver(qtiObjectReader);
         return assessmentObjectResolver.resolveAssessmentItem(systemId);
     }
 
     public ItemValidationResult loadResolveAndValidateItem(final URI systemId) {
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, true);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, true, true);
         final ResolvedAssessmentItem resolvedAssessmentItem = new AssessmentObjectResolver(qtiObjectReader).resolveAssessmentItem(systemId);
         final AssessmentObjectValidator assessmentObjectValidator = new AssessmentObjectValidator(qtiObjectReader.getJqtiExtensionManager());
         return assessmentObjectValidator.validateItem(resolvedAssessmentItem);
@@ -94,13 +94,13 @@ public final class AssessmentObjectXmlLoader {
     // AssessmentTest resolution & validation
 
     public ResolvedAssessmentTest loadAndResolveAssessmentTest(final URI systemId) {
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, false);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, false, false);
         final AssessmentObjectResolver assessmentObjectResolver = new AssessmentObjectResolver(qtiObjectReader);
         return assessmentObjectResolver.resolveAssessmentTest(systemId);
     }
 
     public TestValidationResult loadResolveAndValidateTest(final URI systemId) {
-        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, true);
+        final QtiObjectReader qtiObjectReader = qtiXmlReader.createQtiObjectReader(inputResourceLocator, true, true);
         final ResolvedAssessmentTest resolvedAssessmentTest = new AssessmentObjectResolver(qtiObjectReader).resolveAssessmentTest(systemId);
         final AssessmentObjectValidator assessmentObjectValidator = new AssessmentObjectValidator(qtiObjectReader.getJqtiExtensionManager());
         return assessmentObjectValidator.validateTest(resolvedAssessmentTest);
