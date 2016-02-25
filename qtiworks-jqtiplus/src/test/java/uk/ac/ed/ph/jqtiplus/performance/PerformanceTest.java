@@ -1,16 +1,18 @@
 
 package uk.ac.ed.ph.jqtiplus.performance;
 
+import org.junit.Test;
+
 /**
- * Used for some performance testing
+ * Used for to test how a test with 7500 assessmentItems is loaded.
  *
  * @author srosse, stephane.rosse@frentix.com, http://www.frentix.com
  */
 public class PerformanceTest {
 
-	/*
 	@Test
 	public void openBigTest_memory() {
+		/*
 		final File resourceFile = new File("/HotCoffee/QTI/20160217-122351/test9c173d5c-beca-4c70-8e16-2837bb5984c0.xml");
 		final QtiXmlReader qtiXmlReader = UnitTestHelper.createUnitTestQtiXmlReader();
 		final ResourceLocator fileResourceLocator = new FileResourceLocator();
@@ -27,8 +29,10 @@ public class PerformanceTest {
         final AssessmentItem item = resolvedItem.getRootNodeLookup().extractIfSuccessful();
         Assert.assertNotNull(item);
         Assert.assertEquals(1, item.getItemBody().findInteractions().size());
+        */
 	}
 
+	/*
 	@Test
 	public void openBigTest() {
 
@@ -42,7 +46,8 @@ public class PerformanceTest {
 
 	@Test
 	public void openBigTest_twice() {
-		//openBigTest_sub();
+		final long time = openBigTest_sub();
+        System.out.println("Takes (ms): " + (time / 1000000));
 		//openBigTest_sub();
 
 		try {
@@ -57,7 +62,7 @@ public class PerformanceTest {
 
 
 	public long openBigTest_sub() {
-		final File resourceFile = new File("/HotCoffee/QTI/20160217-122351/test9c173d5c-beca-4c70-8e16-2837bb5984c0.xml");
+		final File resourceFile = new File("/HotCoffee/QTI/20160219-180424/testfa908329-ab44-4821-a20d-ca634b6afb06.xml");
 		final QtiXmlReader qtiXmlReader = UnitTestHelper.createUnitTestQtiXmlReader();
 		final ResourceLocator fileResourceLocator = new FileResourceLocator();
 
@@ -78,4 +83,5 @@ public class PerformanceTest {
         return time;
 	}
 	*/
+
 }

@@ -51,7 +51,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author David McKain
  */
-public final class SimpleDomBuilderHandler extends DefaultHandler {
+public class SimpleDomBuilderHandler extends DefaultHandler {
 
     /** Document being build */
     private final Document document;
