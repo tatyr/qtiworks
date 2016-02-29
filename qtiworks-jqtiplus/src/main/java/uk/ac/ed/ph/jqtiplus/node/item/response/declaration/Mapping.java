@@ -162,7 +162,13 @@ public final class Mapping extends AbstractNode {
      * @return target value for given source value
      */
     public FloatValue computeTargetValue(final Value sourceValue) {
-        if (!sourceValue.isNull()) {
+        if (sourceValue.isNull()) {
+        	final ResponseDeclaration responseDeclaration = getParent();
+            if (responseDeclaration.hasCardinality(Cardinality.SINGLE)) {
+                /* Single cardinality => take mapped value, using default if nothing specified */
+                return new FloatValue(applyConstraints(mapEmptyValue()));
+            }
+        } else {
             final ResponseDeclaration responseDeclaration = getParent();
             if (responseDeclaration.hasCardinality(Cardinality.SINGLE)) {
                 /* Single cardinality => take mapped value, using default if nothing specified */
@@ -180,6 +186,18 @@ public final class Mapping extends AbstractNode {
             }
         }
         return new FloatValue(applyConstraints(getDefaultValue()));
+    }
+
+    /* Search an empty mapKey */
+    private double mapEmptyValue() {
+        double result = getDefaultValue();
+        for (final MapEntry entry : getMapEntries()) {
+            if (entry.getMapKey().toQtiString().isEmpty()) {
+                result = entry.getMappedValue();
+                break;
+            }
+        }
+        return result;
     }
 
     private double mapSingleValue(final SingleValue value) {
