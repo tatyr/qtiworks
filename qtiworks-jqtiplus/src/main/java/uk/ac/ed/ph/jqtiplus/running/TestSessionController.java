@@ -802,6 +802,46 @@ public final class TestSessionController extends TestProcessingController {
     }
 
     /**
+     * @return True if the current item has a following node
+     */
+    public boolean hasFollowingNonLinearItem() {
+        final TestPlanNode currentTestPartNode = assertCurrentTestPartNode();
+        final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
+        assertNonlinearTestPart(currentTestPartNode);
+        assertTestPartOpen(currentTestPartSessionState);
+
+        final TestPlanNode currentItemRefNode = getCurrentItemRefNode();
+        return currentItemRefNode != null && currentItemRefNode.hasFollowingSibling();
+    }
+
+
+    /**
+     * Select the following sibling the next item within the current {@link NavigationMode#NONLINEAR} {@link TestPart}.
+     *
+     * @param currentTestPartNode
+     * @param startNode
+     * @param timestamp
+     * @return
+     */
+    public boolean selectFollowingItemNonLinear(final Date timestamp) {
+    	Assert.notNull(timestamp, "timestamp");
+        final TestPlanNode currentTestPartNode = assertCurrentTestPartNode();
+        final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
+        assertNonlinearTestPart(currentTestPartNode);
+        assertTestPartOpen(currentTestPartSessionState);
+
+        final TestPlanNode currentItemRefNode = getCurrentItemRefNode();
+        if(currentItemRefNode.hasFollowingSibling()) {
+        	final TestPlanNode  nextItem = currentItemRefNode.getFollowingSibling();
+        	if(nextItem != null) {
+            	selectItemNonlinear(timestamp, nextItem.getKey());
+            	return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Select an item within the current {@link NavigationMode#NONLINEAR} {@link TestPart}, or
      * deselects the current item is the given key is null.
      * <p>

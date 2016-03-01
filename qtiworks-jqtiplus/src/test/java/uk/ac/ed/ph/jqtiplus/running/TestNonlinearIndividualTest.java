@@ -167,4 +167,24 @@ public final class TestNonlinearIndividualTest extends SimpleProcessingTestBase 
         assertItemResponseProcessingNotRun();
         assertOutcomeProcessingNotRun();
     }
+
+
+    @Test
+    public void testNextItem() {
+    	testSessionController.enterTest(testEntryTimestamp);
+        testSessionController.enterNextAvailableTestPart(testPartEntryTimestamp);
+        testSessionController.selectItemNonlinear(operationTimestamp, getTestNodeKey("i1"));
+        handleChoiceResponse("ChoiceA");
+        testSessionController.selectFollowingItemNonLinear(operationTimestamp);
+        handleChoiceResponse("ChoiceB");
+
+        /* RP should have happened on both items; OP should have run */
+        assertChoiceItemResponseProcessingRun(item1SessionState);
+        assertChoiceItemResponseProcessingRun(item2SessionState);
+        assertOutcomeProcessingRun();
+        assertChoiceItemScore(item1SessionState, 1.0);
+        assertChoiceItemScore(item2SessionState, 0.0);
+        assertTestScore(1.0);
+
+    }
 }
