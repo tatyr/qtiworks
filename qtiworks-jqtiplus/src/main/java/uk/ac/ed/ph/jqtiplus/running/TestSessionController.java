@@ -805,13 +805,18 @@ public final class TestSessionController extends TestProcessingController {
      * @return True if the current item has a following node
      */
     public boolean hasFollowingNonLinearItem() {
-        final TestPlanNode currentTestPartNode = assertCurrentTestPartNode();
-        final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
-        assertNonlinearTestPart(currentTestPartNode);
-        assertTestPartOpen(currentTestPartSessionState);
+        try {
+			final TestPlanNode currentTestPartNode = assertCurrentTestPartNode();
+			final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
+			assertNonlinearTestPart(currentTestPartNode);
+			assertTestPartOpen(currentTestPartSessionState);
+		} catch (final QtiCandidateStateException e) {
+			//don't throw an exception, but say no
+			return false;
+		}
 
-        final TestPlanNode currentItemRefNode = getCurrentItemRefNode();
-        return currentItemRefNode != null && currentItemRefNode.hasFollowingSibling();
+        final TestPlanNode nextItemRefNode = findNextEnterableItemNonLinear();
+        return nextItemRefNode != null;
     }
 
 
@@ -830,15 +835,77 @@ public final class TestSessionController extends TestProcessingController {
         assertNonlinearTestPart(currentTestPartNode);
         assertTestPartOpen(currentTestPartSessionState);
 
-        final TestPlanNode currentItemRefNode = getCurrentItemRefNode();
-        if(currentItemRefNode.hasFollowingSibling()) {
-        	final TestPlanNode  nextItem = currentItemRefNode.getFollowingSibling();
-        	if(nextItem != null) {
-            	selectItemNonlinear(timestamp, nextItem.getKey());
-            	return true;
-            }
+        final TestPlanNode nextItem = findNextEnterableItemNonLinear();
+        if(nextItem != null) {
+        	selectItemNonlinear(timestamp, nextItem.getKey());
+        	return true;
         }
         return false;
+    }
+
+    private TestPlanNode findNextEnterableItemNonLinear() {
+        final TestPlanNode currentTestPartNode = assertCurrentTestPartNode();
+        final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
+        assertNonlinearTestPart(currentTestPartNode);
+        assertTestPartOpen(currentTestPartSessionState);
+
+    	final TestPlanNode currentItemRefNode = getCurrentItemRefNode();
+        TestPlanNode startSearchNode;
+        if(currentItemRefNode == null) {
+        	startSearchNode = currentTestPartNode.getChildAt(0);
+        } else {
+        	startSearchNode = findNextSiblingOrAncestorNode(currentItemRefNode);
+        }
+
+        return findNextEnterableItemDepthFirst(currentTestPartNode, startSearchNode);
+    }
+
+    private TestPlanNode findNextEnterableItemDepthFirst(final TestPlanNode currentTestPartNode, final TestPlanNode startNode) {
+        TestPlanNode currentNode = startNode;
+        SEARCH: while (currentNode!=null) {
+            switch (currentNode.getTestNodeType()) {
+                case ASSESSMENT_SECTION:
+                   if (currentNode.getChildCount()>0) {
+                       currentNode = currentNode.getChildAt(0);
+                       continue SEARCH;
+                    }
+                    break;
+                case ASSESSMENT_ITEM_REF:
+                    return currentNode;
+                default:
+                    throw new QtiLogicException("Did not expect to meet a Node of type " + currentNode.getTestNodeType());
+            }
+            /* If we reach here, then the a depth-first search on the currentNode yielded nothing.
+             * So we move onto the next sibling. If there are no more siblings, we go up and move on.
+             * Continue until we reach the end of the testPart
+             */
+            currentNode = findNextSiblingOrAncestorNode(currentNode);
+        }
+        return null;
+    }
+
+    private TestPlanNode findNextSiblingOrAncestorNode(final TestPlanNode startNode) {
+        final TestPlanNode currentNode = startNode;
+        if (currentNode.hasFollowingSibling()) {
+            /* Walk to next sibling */
+            return currentNode.getFollowingSibling();
+        }
+        else {
+            /* No more siblings, so go up to parent then onto its next sibling */
+            final TestPlanNode parentNode = currentNode.getParent();
+            switch (parentNode.getTestNodeType()) {
+                case TEST_PART:
+                    /* We've reached the end of the TestPart, so stop searching altogether */
+                    return null;
+
+                case ASSESSMENT_SECTION:
+                    /* Reached end of section. So move on */
+                   return findNextSiblingOrAncestorNode(parentNode);
+
+                default:
+                    throw new QtiLogicException("Did not expect to meet a Node of type " + currentNode.getTestNodeType());
+            }
+        }
     }
 
     /**
