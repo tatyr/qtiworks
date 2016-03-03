@@ -909,6 +909,25 @@ public final class TestSessionController extends TestProcessingController {
     }
 
     /**
+     * Visit the test plan and go through all nodes.
+     *
+     * @param visitor
+     */
+    public void visitTestPlan(final TestPlanVisitor visitor) {
+    	final List<TestPlanNode> testPlanNodes = testSessionState.getTestPlan().getTestPartNodes();
+    	for(final TestPlanNode testPlanNode:testPlanNodes) {
+    		visitTestPlan(testPlanNode,  visitor);
+    	}
+    }
+
+    private void visitTestPlan(final TestPlanNode testPlanNode, final TestPlanVisitor visitor) {
+    	visitor.visit(testPlanNode);
+    	for(final TestPlanNode childrentestPlanNode:testPlanNode.getChildren()) {
+    		visitTestPlan(childrentestPlanNode, visitor);
+    	}
+    }
+
+    /**
      * Select an item within the current {@link NavigationMode#NONLINEAR} {@link TestPart}, or
      * deselects the current item is the given key is null.
      * <p>
