@@ -38,6 +38,7 @@ import uk.ac.ed.ph.jqtiplus.group.item.response.declaration.AreaMappingGroup;
 import uk.ac.ed.ph.jqtiplus.group.item.response.declaration.MappingGroup;
 import uk.ac.ed.ph.jqtiplus.node.AssessmentObject;
 import uk.ac.ed.ph.jqtiplus.node.item.CorrectResponse;
+import uk.ac.ed.ph.jqtiplus.node.shared.BaseTypeAndCardinality;
 import uk.ac.ed.ph.jqtiplus.node.shared.VariableDeclaration;
 import uk.ac.ed.ph.jqtiplus.node.shared.VariableType;
 import uk.ac.ed.ph.jqtiplus.validation.ValidationContext;
@@ -48,7 +49,7 @@ import uk.ac.ed.ph.jqtiplus.value.BaseType;
  *
  * @author Jonathon Hare
  */
-public final class ResponseDeclaration extends VariableDeclaration {
+public final class ResponseDeclaration extends VariableDeclaration implements BaseTypeAndCardinality {
 
     private static final long serialVersionUID = 1574002038906870724L;
 

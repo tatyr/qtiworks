@@ -38,6 +38,7 @@ import uk.ac.ed.ph.jqtiplus.group.item.CorrectResponseGroup;
 import uk.ac.ed.ph.jqtiplus.group.result.CandidateResponseGroup;
 import uk.ac.ed.ph.jqtiplus.node.item.CorrectResponse;
 import uk.ac.ed.ph.jqtiplus.node.item.response.declaration.ResponseDeclaration;
+import uk.ac.ed.ph.jqtiplus.node.shared.BaseTypeAndCardinality;
 import uk.ac.ed.ph.jqtiplus.node.shared.FieldValue;
 import uk.ac.ed.ph.jqtiplus.node.shared.VariableType;
 import uk.ac.ed.ph.jqtiplus.types.Identifier;
@@ -52,7 +53,7 @@ import java.util.List;
  *
  * @author Jonathon Hare
  */
-public final class ResponseVariable extends ItemVariable implements ResultNode {
+public final class ResponseVariable extends ItemVariable implements ResultNode, BaseTypeAndCardinality {
 
     private static final long serialVersionUID = 6478318320056351297L;
 

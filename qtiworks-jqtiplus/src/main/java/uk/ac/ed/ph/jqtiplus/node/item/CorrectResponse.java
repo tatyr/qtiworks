@@ -37,7 +37,7 @@ import uk.ac.ed.ph.jqtiplus.attribute.value.StringAttribute;
 import uk.ac.ed.ph.jqtiplus.group.shared.FieldValueGroup;
 import uk.ac.ed.ph.jqtiplus.node.AbstractNode;
 import uk.ac.ed.ph.jqtiplus.node.QtiNode;
-import uk.ac.ed.ph.jqtiplus.node.item.response.declaration.ResponseDeclaration;
+import uk.ac.ed.ph.jqtiplus.node.shared.BaseTypeAndCardinality;
 import uk.ac.ed.ph.jqtiplus.node.shared.FieldValue;
 import uk.ac.ed.ph.jqtiplus.node.shared.FieldValueParent;
 import uk.ac.ed.ph.jqtiplus.validation.ValidationContext;
@@ -94,8 +94,8 @@ public class CorrectResponse extends AbstractNode implements FieldValueParent {
     }
 
     @Override
-    public ResponseDeclaration getParent() {
-        return (ResponseDeclaration) super.getParent();
+    public BaseTypeAndCardinality getParent() {
+        return (BaseTypeAndCardinality)super.getParent();
     }
 
     /**
