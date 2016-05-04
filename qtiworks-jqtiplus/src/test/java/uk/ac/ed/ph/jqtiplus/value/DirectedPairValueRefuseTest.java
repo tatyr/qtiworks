@@ -61,7 +61,7 @@ public class DirectedPairValueRefuseTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "" }, { " " }, { "1_identifier 2_identifier" },
+                { "" }, { " " }, { "&_identifier +_identifier" },
         });
     }
 

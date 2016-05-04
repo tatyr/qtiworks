@@ -113,7 +113,7 @@ public final class Identifier implements Serializable, Comparable<Identifier> {
         }
 
         /* Check first character */
-        if (!Character.isLetter(value.codePointAt(0)) && value.charAt(0) != '_') {
+        if (!Character.isLetter(value.codePointAt(0)) && !Character.isDigit(value.codePointAt(0)) && value.charAt(0) != '_') {
             throw new QtiParseException("Invalid identifier '" + value + "': First character '" + value.charAt(0) + "' is not valid");
         }
 

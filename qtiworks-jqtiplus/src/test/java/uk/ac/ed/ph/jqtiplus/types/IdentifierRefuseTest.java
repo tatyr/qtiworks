@@ -59,7 +59,7 @@ public class IdentifierRefuseTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "" }, { " " }, { "-identifier" }, { ".identifier" }, { "1identifier" },
+                { "" }, { " " }, { "-identifier" }, { ".identifier" }, //{ "1identifier" }, need to be accepted for compatibility with Onyx 3.8
                 { "id.entifier" },
                 { "identifier:identifier" }, { "`A" }, { "A`" }, { "�A" }, { "A�" }, { "!A" }, { "A!" }, { "\"A" }, { "A\"" }, { "�A" }, { "A�" }, { "$A" },
                 { "A$" }, { "%A" }, { "A%" }, { "^A" }, { "A^" }, { "&A" }, { "A&" }, { "*A" }, { "A*" }, { "(A" }, { "A(" }, { ")A" }, { "A)" }, { "=A" },
