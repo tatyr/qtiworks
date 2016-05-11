@@ -38,6 +38,7 @@ import uk.ac.ed.ph.jqtiplus.internal.util.Assert;
 import uk.ac.ed.ph.jqtiplus.types.Identifier;
 import uk.ac.ed.ph.jqtiplus.types.Stringifiable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -190,7 +191,8 @@ public enum BaseType implements Stringifiable {
 
         @Override
         public SingleValue parseSingleValue(final String string) {
-            throw new IllegalStateException("Values of baseType file cannot be instantiated from a string");
+        	final File file = new File(string);
+            return new FileValue(file, "", file.getName());
         }
     },
 
