@@ -828,19 +828,18 @@ public final class TestSessionController extends TestProcessingController {
      * @param timestamp
      * @return
      */
-    public boolean selectFollowingItemNonLinear(final Date timestamp) {
+    public TestPlanNode selectFollowingItemNonLinear(final Date timestamp) {
     	Assert.notNull(timestamp, "timestamp");
         final TestPlanNode currentTestPartNode = assertCurrentTestPartNode();
         final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
         assertNonlinearTestPart(currentTestPartNode);
         assertTestPartOpen(currentTestPartSessionState);
 
-        final TestPlanNode nextItem = findNextEnterableItemNonLinear();
+        TestPlanNode nextItem = findNextEnterableItemNonLinear();
         if(nextItem != null) {
-        	selectItemNonlinear(timestamp, nextItem.getKey());
-        	return true;
+        	nextItem = selectItemNonlinear(timestamp, nextItem.getKey());
         }
-        return false;
+        return nextItem;
     }
 
     private TestPlanNode findNextEnterableItemNonLinear() {

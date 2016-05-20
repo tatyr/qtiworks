@@ -59,6 +59,7 @@ import uk.ac.ed.ph.jqtiplus.value.MultipleValue;
 import uk.ac.ed.ph.jqtiplus.value.OrderedValue;
 import uk.ac.ed.ph.jqtiplus.value.RecordValue;
 import uk.ac.ed.ph.jqtiplus.value.SingleValue;
+import uk.ac.ed.ph.jqtiplus.value.StringValue;
 import uk.ac.ed.ph.jqtiplus.value.TextFormat;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
@@ -378,18 +379,25 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
         }
         else {
             switch (responseCardinality) {
-                case SINGLE:
+                case SINGLE: {
                     /* (Single response) */
-                    nonNullResponseStrings.add((SingleValue) responseValue);
+                	final SingleValue stringValue = (SingleValue) responseValue;
+                	final String string = stringValue.toQtiString();
+                	if(string != null && string.length() > 0) {
+	                	final String[] strings = string.split("\\s");
+	                	for(final String s:strings) {
+	                		nonNullResponseStrings.add(new StringValue(s));
+	                	}
+                	}
                     break;
-
-                case RECORD:
+                }
+                case RECORD: {
                     /* (Special record response. We'll validate the string value) */
                     final RecordValue recordValue = (RecordValue) responseValue;
                     final SingleValue stringValue = recordValue.get(StringInteraction.KEY_STRING_VALUE_NAME);
                     nonNullResponseStrings.add(stringValue);
                     break;
-
+                }
                 case MULTIPLE:
                 case ORDERED:
                     /* (Container response) */
