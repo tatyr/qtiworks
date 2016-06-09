@@ -33,6 +33,7 @@
  */
 package uk.ac.ed.ph.jqtiplus.node.item.interaction;
 
+import uk.ac.ed.ph.jqtiplus.attribute.enumerate.OrientationAttribute;
 import uk.ac.ed.ph.jqtiplus.attribute.value.BooleanAttribute;
 import uk.ac.ed.ph.jqtiplus.attribute.value.IntegerAttribute;
 import uk.ac.ed.ph.jqtiplus.group.item.interaction.choice.SimpleChoiceGroup;
@@ -46,6 +47,7 @@ import uk.ac.ed.ph.jqtiplus.validation.ValidationContext;
 import uk.ac.ed.ph.jqtiplus.value.Cardinality;
 import uk.ac.ed.ph.jqtiplus.value.IdentifierValue;
 import uk.ac.ed.ph.jqtiplus.value.ListValue;
+import uk.ac.ed.ph.jqtiplus.value.Orientation;
 import uk.ac.ed.ph.jqtiplus.value.SingleValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
@@ -100,12 +102,16 @@ public final class ChoiceInteraction extends BlockInteraction implements SimpleC
     /** Default value of minChoices attribute . */
     public static final int ATTR_MIN_CHOICES_DEFAULT_VALUE = 0;
 
+    /** Name of orientation attribute in xml schema. */
+    public static final String ATTR_ORIENTATION_NAME = "orientation";
+
     public ChoiceInteraction(final QtiNode parent) {
         super(parent, QTI_CLASS_NAME);
 
         getAttributes().add(new BooleanAttribute(this, ATTR_SHUFFLE_NAME, true));
         getAttributes().add(new IntegerAttribute(this, ATTR_MAX_CHOICES_NAME, ATTR_MAX_CHOICES_DEFAULT_VALUE, true));
         getAttributes().add(new IntegerAttribute(this, ATTR_MIN_CHOICES_NAME, ATTR_MIN_CHOICES_DEFAULT_VALUE, false));
+        getAttributes().add(new OrientationAttribute(this, ATTR_ORIENTATION_NAME, false));
 
         getNodeGroups().add(new SimpleChoiceGroup(this, 1));
     }
@@ -121,6 +127,13 @@ public final class ChoiceInteraction extends BlockInteraction implements SimpleC
         return getAttributes().getBooleanAttribute(ATTR_SHUFFLE_NAME).getComputedNonNullValue();
     }
 
+    public Orientation getOrientation() {
+        return getAttributes().getOrientationAttribute(ATTR_ORIENTATION_NAME).getComputedValue();
+    }
+
+    public void setOrientation(final Orientation orientation) {
+        getAttributes().getOrientationAttribute(ATTR_ORIENTATION_NAME).setValue(orientation);
+    }
 
     public int getMaxChoices() {
         return getAttributes().getIntegerAttribute(ATTR_MAX_CHOICES_NAME).getComputedNonNullValue();
