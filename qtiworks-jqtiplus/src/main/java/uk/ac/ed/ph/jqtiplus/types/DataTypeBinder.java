@@ -167,7 +167,15 @@ public final class DataTypeBinder {
                 result = Double.parseDouble(string);
             }
             catch (final NumberFormatException e) {
-                throw new QtiParseException("Invalid float '" + string + "'", e);
+            	if(string.indexOf(',') >= 0) {//allow , instead of .
+                    try {
+						result = Double.parseDouble(string.replace(',', '.'));
+					} catch (final NumberFormatException e1) {
+	            		throw new QtiParseException("Invalid float '" + string + "'", e);
+					}
+            	} else {
+            		throw new QtiParseException("Invalid float '" + string + "'", e);
+            	}
             }
         }
         return result;
