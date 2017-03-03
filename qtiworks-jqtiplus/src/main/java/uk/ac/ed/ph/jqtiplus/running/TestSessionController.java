@@ -757,8 +757,13 @@ public final class TestSessionController extends TestProcessingController {
         /* End current testPart, ignoring any validation issues. This will perform OP */
         final TestPlanNode currentTestPartNode = getCurrentTestPartNode();
         if (currentTestPartNode!=null) {
-           endCurrentTestPart(currentTestPartNode, timestamp);
-           exitCurrentTestPart(currentTestPartNode, timestamp);
+            final TestPartSessionState currentTestPartSessionState = expectTestPartSessionState(currentTestPartNode);
+            if(currentTestPartSessionState.isOpen()) {
+            	endCurrentTestPart(currentTestPartNode, timestamp);
+            }
+            if(!currentTestPartSessionState.isExited()) {
+            	exitCurrentTestPart(currentTestPartNode, timestamp);
+            }
         }
 
         /* Mark test as ended */
