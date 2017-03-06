@@ -179,6 +179,14 @@ public final class ItemSessionState extends AbstractPartSessionState implements 
         resetBuiltinVariables();
     }
 
+    public void resetResponses() {
+        this.responseValues.clear();
+        this.rawResponseDataMap.clear();
+        this.unboundResponseIdentifiers.clear();
+        this.invalidResponseIdentifiers.clear();
+        this.uncommittedResponseValues.clear();
+    }
+
     public void resetBuiltinVariables() {
         resetDuration();
         setNumAttempts(0);
