@@ -40,6 +40,7 @@ import uk.ac.ed.ph.jqtiplus.exception.QtiInvalidLookupException;
 import uk.ac.ed.ph.jqtiplus.exception.QtiLogicException;
 import uk.ac.ed.ph.jqtiplus.internal.util.Assert;
 import uk.ac.ed.ph.jqtiplus.node.item.CorrectResponse;
+import uk.ac.ed.ph.jqtiplus.node.item.interaction.Interaction;
 import uk.ac.ed.ph.jqtiplus.node.item.response.declaration.ResponseDeclaration;
 import uk.ac.ed.ph.jqtiplus.node.item.template.declaration.TemplateDeclaration;
 import uk.ac.ed.ph.jqtiplus.node.item.template.processing.SetCorrectResponse;
@@ -58,6 +59,7 @@ import uk.ac.ed.ph.jqtiplus.value.NullValue;
 import uk.ac.ed.ph.jqtiplus.value.Signature;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -94,6 +96,14 @@ public class ItemProcessingController extends ItemValidationController implement
     @Override
     public ItemSessionState getItemSessionState() {
         return itemSessionState;
+    }
+
+    public List<Interaction> getInteractions() {
+    	return itemProcessingMap.getInteractions();
+    }
+
+    public Interaction getInteraction(final Identifier responseIdentifier) {
+    	return itemProcessingMap.getInteractionByResponseIdentifierMap().get(responseIdentifier);
     }
 
     @Override

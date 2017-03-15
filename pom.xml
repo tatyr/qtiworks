@@ -12,7 +12,7 @@ All Rights Reserved
   <name>QTIWorks</name>
   <groupId>org.openolat.qtiworks</groupId>
   <artifactId>qtiworks</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <packaging>pom</packaging>
   <modules>
     <module>qtiworks-jqtiplus</module>
@@ -25,7 +25,7 @@ All Rights Reserved
   </modules>
   <properties>
     <asciimath-parser.version>1.3.0</asciimath-parser.version>
-    <snuggletex.version>1.3-SNAPSHOT</snuggletex.version>
+    <snuggletex.version>1.3.0</snuggletex.version>
     <jacomax.version>0.2.3</jacomax.version>
     <slf4j.version>1.7.13</slf4j.version>
     <logback.version>1.1.3</logback.version>
