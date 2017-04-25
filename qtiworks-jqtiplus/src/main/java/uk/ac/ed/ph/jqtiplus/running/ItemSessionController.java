@@ -741,7 +741,7 @@ public final class ItemSessionController extends ItemProcessingController implem
 
         /* Make sure there are some uncommitted responses */
         final Map<Identifier, Value> uncommittedResponseValues = itemSessionState.getUncommittedResponseValues();
-        if (uncommittedResponseValues.isEmpty()) {
+        if (uncommittedResponseValues.isEmpty() && getInteractions().size() > 0) {
             throw new QtiCandidateStateException("No responses are waiting to be committed");
         }
 
