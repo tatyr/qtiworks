@@ -1954,6 +1954,36 @@ public final class TestSessionController extends TestProcessingController {
     //-------------------------------------------------------------------
     // Duration management for Control Objects
 
+    /**
+     * Marks the test session as suspended.
+     *
+     * @param timestamp
+     */
+    public void suspendTestSession(final Date timestamp) {
+        Assert.notNull(timestamp);
+        assertTestOpen();
+        //assertTestNotSuspended();
+        logger.debug("Suspending test session on {}");
+
+        testSessionState.setSuspendTime(timestamp);
+        endControlObjectTimer(testSessionState, timestamp);
+    }
+
+    /**
+     * Un-suspends a test previously marked as suspended.
+     *
+     * @param timestamp timestamp for this event, which must not be null
+     */
+    public void unsuspendTestSession(final Date timestamp) {
+        Assert.notNull(timestamp);
+        assertTestOpen();
+        //assertTestSuspended();
+        logger.debug("Unsuspending test session on {}");
+
+        testSessionState.setSuspendTime(null);
+        startControlObjectTimer(testSessionState, timestamp);
+    }
+
     private void startControlObjectTimer(final ControlObjectSessionState controlObjectState, final Date timestamp) {
         controlObjectState.setDurationIntervalStartTime(timestamp);
     }

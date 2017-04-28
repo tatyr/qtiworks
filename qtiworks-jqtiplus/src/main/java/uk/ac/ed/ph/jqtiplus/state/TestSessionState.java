@@ -50,6 +50,7 @@ import uk.ac.ed.ph.jqtiplus.value.Value;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -75,6 +76,8 @@ public final class TestSessionState extends ControlObjectSessionState implements
     private final Map<TestPlanNodeKey, AssessmentSectionSessionState> assessmentSectionSessionStates;
     private final Map<TestPlanNodeKey, ItemSessionState> itemSessionStates;
     private final Map<Identifier, Value> outcomeValues;
+
+    private Date suspendTime;
 
     private boolean initialized;
     private TestPlanNodeKey currentTestPartKey;
@@ -120,7 +123,7 @@ public final class TestSessionState extends ControlObjectSessionState implements
         this.initialized = false;
         this.currentTestPartKey = null;
         this.currentItemKey = null;
-
+        this.suspendTime = null;
     }
 
     //----------------------------------------------------------------
@@ -133,8 +136,20 @@ public final class TestSessionState extends ControlObjectSessionState implements
         this.initialized = initialized;
     }
 
+    @ObjectDumperOptions(DumpMode.IGNORE)
+    public boolean isSuspended() {
+    	return suspendTime != null;
+    }
 
-    public TestPlanNodeKey getCurrentTestPartKey() {
+    public Date getSuspendTime() {
+		return suspendTime;
+	}
+
+	public void setSuspendTime(final Date suspendTime) {
+		this.suspendTime = suspendTime;
+	}
+
+	public TestPlanNodeKey getCurrentTestPartKey() {
         return currentTestPartKey;
     }
 
