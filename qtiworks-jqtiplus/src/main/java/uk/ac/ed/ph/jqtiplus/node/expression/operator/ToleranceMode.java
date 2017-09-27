@@ -36,6 +36,7 @@ package uk.ac.ed.ph.jqtiplus.node.expression.operator;
 import uk.ac.ed.ph.jqtiplus.exception.QtiParseException;
 import uk.ac.ed.ph.jqtiplus.types.Stringifiable;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +56,10 @@ public enum ToleranceMode implements Stringifiable {
         public boolean isEqual(final double firstNumber, final double secondNumber,
                 final double tolerance1, final double tolerance2,
                 final boolean includeLowerBound, final boolean includeUpperBound) {
-            return firstNumber == secondNumber;
+
+        		final BigDecimal firstBigNumber = BigDecimal.valueOf(firstNumber);
+        		final BigDecimal secondBigNumber = BigDecimal.valueOf(secondNumber);
+            return firstBigNumber.compareTo(secondBigNumber) == 0;
         }
     },
 
@@ -71,17 +75,21 @@ public enum ToleranceMode implements Stringifiable {
         public boolean isEqual(final double firstNumber, final double secondNumber,
                 final double tolerance1, final double tolerance2,
                 final boolean includeLowerBound, final boolean includeUpperBound) {
-            final double lower = firstNumber - tolerance1;
 
-            if (includeLowerBound && secondNumber < lower ||
-                    !includeLowerBound && secondNumber <= lower) {
+            final BigDecimal firstBigNumber = BigDecimal.valueOf(firstNumber);
+            final BigDecimal secondBigNumber = BigDecimal.valueOf(secondNumber);
+
+            final BigDecimal tolerance1Big = BigDecimal.valueOf(tolerance1);
+            final BigDecimal lowerBig = firstBigNumber.subtract(tolerance1Big);
+            if ((includeLowerBound && secondBigNumber.compareTo(lowerBig) < 0) ||
+                    (!includeLowerBound && secondBigNumber.compareTo(lowerBig) <= 0)) {
                 return false;
             }
 
-            final double upper = firstNumber + tolerance2;
-
-            if (includeUpperBound && secondNumber > upper ||
-                    !includeUpperBound && secondNumber >= upper) {
+            final BigDecimal tolerance2Big = BigDecimal.valueOf(tolerance2);
+            final BigDecimal upperBig = firstBigNumber.add(tolerance2Big);
+            if (includeUpperBound && secondBigNumber.compareTo(upperBig) > 0 ||
+                    !includeUpperBound && secondBigNumber.compareTo(upperBig) >= 0) {
                 return false;
             }
 
