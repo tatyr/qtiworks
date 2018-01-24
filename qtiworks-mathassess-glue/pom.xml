@@ -9,12 +9,12 @@ All Rights Reserved
   <modelVersion>4.0.0</modelVersion>
   <name>QTIWorks MathAssessTools Glue Module</name>
   <artifactId>qtiworks-mathassess-glue</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.openolat.qtiworks</groupId>
     <artifactId>qtiworks</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
   </parent>
   <dependencies>
     <dependency>
@@ -23,7 +23,7 @@ All Rights Reserved
       <version>${asciimath-parser.version}</version>
     </dependency>
     <dependency>
-      <groupId>uk.ac.ed.ph.jacomax</groupId>
+      <groupId>org.openolat.jacomax</groupId>
       <artifactId>jacomax</artifactId>
       <version>${jacomax.version}</version>
     </dependency>
