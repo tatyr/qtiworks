@@ -36,6 +36,7 @@ package uk.ac.ed.ph.jqtiplus.node.expression.outcome;
 import uk.ac.ed.ph.jqtiplus.attribute.enumerate.BaseTypeAttribute;
 import uk.ac.ed.ph.jqtiplus.attribute.value.IdentifierAttribute;
 import uk.ac.ed.ph.jqtiplus.node.expression.ExpressionParent;
+import uk.ac.ed.ph.jqtiplus.node.shared.VariableDeclaration;
 import uk.ac.ed.ph.jqtiplus.node.test.AssessmentItemRef;
 import uk.ac.ed.ph.jqtiplus.running.ItemProcessingContext;
 import uk.ac.ed.ph.jqtiplus.running.TestProcessingContext;
@@ -132,6 +133,12 @@ public final class TestVariables extends ItemSubset {
         for (final TestPlanNode itemRefNode : matchedTestPlanNodes) {
             final ItemProcessingContext itemProcessingContext = testProcessingContext.getItemProcessingContext(itemRefNode);
             final AssessmentItemRef assessmentItemRef = (AssessmentItemRef) testProcessingContext.getTestProcessingMap().resolveAbstractPart(itemRefNode);
+
+            final Identifier variableIdentifier = getVariableIdentifier();
+            final VariableDeclaration variableDeclaration = itemProcessingContext.isValidLocalVariableReference(variableIdentifier);
+            if(variableDeclaration == null) {
+            		continue;//from the specification, the item without the variable can be ignored
+            }
             final Value value = itemProcessingContext.evaluateVariableValue(getVariableIdentifier());
             if (!value.isNull() && value.getCardinality() == Cardinality.SINGLE) {
                 if ((baseType != null && value.getBaseType() == baseType) ||
