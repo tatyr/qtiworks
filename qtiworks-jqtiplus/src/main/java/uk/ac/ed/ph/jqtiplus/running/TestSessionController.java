@@ -993,7 +993,7 @@ public final class TestSessionController extends TestProcessingController {
             if (!newItemSessionState.isEntered()) {
                 newItemSessionController.enterItem(timestamp);
             }
-            else if (!newItemSessionState.isEnded()) {
+            else if (!newItemSessionState.isEnded() && newItemSessionState.isSuspended()) {
                 newItemSessionController.unsuspendItemSession(timestamp);
             }
 
@@ -1999,7 +1999,9 @@ public final class TestSessionController extends TestProcessingController {
     }
 
     private void touchControlObjectTimer(final ControlObjectSessionState controlObjectState, final Date timestamp) {
-        endControlObjectTimer(controlObjectState, timestamp);
+        if(controlObjectState.getDurationIntervalStartTime() != null) {
+        	endControlObjectTimer(controlObjectState, timestamp);
+        }
         startControlObjectTimer(controlObjectState, timestamp);
     }
 
