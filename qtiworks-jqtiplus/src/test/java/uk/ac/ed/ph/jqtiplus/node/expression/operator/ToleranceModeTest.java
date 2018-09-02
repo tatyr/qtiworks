@@ -74,6 +74,12 @@ public class ToleranceModeTest {
                 { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923915d, 0.0000008d, 0.0000002d, true, true, true },
                 { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923914d, 0.0000008d, 0.0000002d, true, true, false },
                 { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923915d, 0.0000008d, 0.0000002d, false, false, false },
+
+                //upper tolerance 0
+                { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923923d, 0.0000008d, 0.0000000d, true, true, true },
+                { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923921d, 0.0000008d, 0.0000000d, true, true, true },
+                { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923924d, 0.0000008d, 0.0000000d, true, true, false },
+                { ToleranceMode.ABSOLUTE, 14.9923923d, 14.9923923d, 0.0000008d, 0.0000000d, true, false, false },
         });
     }
 

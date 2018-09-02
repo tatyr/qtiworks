@@ -185,7 +185,7 @@ public final class Equal extends AbstractFunctionalExpression {
         final FloatOrVariableRef firstToleranceComputer = getFirstTolerance();
         if (firstToleranceComputer!=null && firstToleranceComputer.isConstantFloat()) {
             final double firstToleranceValue = firstToleranceComputer.getConstantFloatValue().doubleValue();
-            if (firstToleranceValue <= 0) {
+            if (firstToleranceValue < 0) {
                 context.fireAttributeValidationError(tolerancesAttr,
                         "Attribute " + ATTR_TOLERANCES_NAME + " (" + firstToleranceValue + ") must be positive");
             }
@@ -226,7 +226,7 @@ public final class Equal extends AbstractFunctionalExpression {
                 return NullValue.INSTANCE;
             }
             firstTolerance = ((FloatValue) firstToleranceValue).doubleValue();
-            if (firstTolerance <= 0.0) {
+            if (firstTolerance < 0.0) {
                 context.fireRuntimeWarning(this, "Computed value of first tolerance " + firstTolerance + " is negative. Returning NULL");
                 return NullValue.INSTANCE;
             }
@@ -240,7 +240,7 @@ public final class Equal extends AbstractFunctionalExpression {
                 return NullValue.INSTANCE;
             }
             secondTolerance = ((FloatValue) secondToleranceValue).doubleValue();
-            if (secondTolerance <= 0.0) {
+            if (secondTolerance < 0.0) {
                 context.fireRuntimeWarning(this, "Computed value of second tolerance " + secondTolerance + " is negative. Returning NULL");
                 return NullValue.INSTANCE;
             }
