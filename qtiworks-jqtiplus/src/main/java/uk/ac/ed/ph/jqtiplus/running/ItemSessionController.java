@@ -938,6 +938,23 @@ public final class ItemSessionController extends ItemProcessingController implem
         return result;
     }
 
+    public AssessmentResult computeAssessmentResult(final AssessmentResult result, final Date timestamp) {
+    	final ItemResult itemResult = computeItemResult(result, item.getIdentifier(), timestamp);
+
+    	final List<ItemResult> itemResults = result.getItemResults();
+    	if(itemResults != null) {
+	    	for(int i=0; i<itemResults.size(); i++) {
+	    		final ItemResult currentItemResult = itemResults.get(i);
+	    		if(currentItemResult.getIdentifier().equals(itemResult.getIdentifier())) {
+	    			itemResults.set(i, itemResult);
+	    			return result;
+	    		}
+	    	}
+    	}
+        result.getItemResults().add(itemResult);
+        return result;
+    }
+
     ItemResult computeItemResult(final AssessmentResult owner, final String identifier, final Date timestamp) {
         final ItemResult itemResult = new ItemResult(owner);
         itemResult.setIdentifier(identifier);
