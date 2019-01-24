@@ -9,7 +9,7 @@ All Rights Reserved
   <modelVersion>4.0.0</modelVersion>
   <name>QTIWorks JQTIPlus</name>
   <artifactId>qtiworks-jqtiplus</artifactId>
-  <version>1.0.11HOT</version>
+  <version>1.0.11</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.openolat.qtiworks</groupId>
