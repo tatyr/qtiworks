@@ -69,7 +69,17 @@ public class MapStringResponseTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { "MapResponse-Empty.xml", new String[] { "" }, 1.0 },
-                { "MapResponse-Empty-Multiple.xml", new String[] { "", "A" }, 2.5 }
+                { "MapResponse-Empty.xml", new String[] { " " }, 1.0 },
+                { "MapResponse-Empty.xml", new String[] { "Z" }, -1.0 },
+                { "MapResponse-Empty-Multiple.xml", new String[] { "", "A" }, 2.5 },
+                // test especially case sensitivity and trimming
+                { "MapResponse-String.xml", new String[] { "Gap" }, 1.0 },
+                { "MapResponse-String.xml", new String[] { "Gap " }, 1.0 },
+                { "MapResponse-String.xml", new String[] { " Gap" }, 1.0 },
+                { "MapResponse-String.xml", new String[] { " gap " }, 1.0 },
+                { "MapResponse-String.xml", new String[] { "fill" }, 0.5 },
+                { "MapResponse-String.xml", new String[] { " fill " }, 0.5 },
+                { "MapResponse-String.xml", new String[] { "Fill" }, -1.0 }
         });
     }
 

@@ -43,6 +43,7 @@ import uk.ac.ed.ph.jqtiplus.value.Cardinality;
 import uk.ac.ed.ph.jqtiplus.value.FloatValue;
 import uk.ac.ed.ph.jqtiplus.value.ListValue;
 import uk.ac.ed.ph.jqtiplus.value.SingleValue;
+import uk.ac.ed.ph.jqtiplus.value.StringValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
 import java.util.HashSet;
@@ -219,6 +220,13 @@ public final class Mapping extends AbstractNode {
         }
         else {
             result = mapKey.toQtiString().equalsIgnoreCase(value.toQtiString());
+        }
+        if(!result && mapKey instanceof StringValue && value instanceof StringValue) {
+        	if (mapEntry.getCaseSensitive()) {
+                result = mapKey.toQtiString().trim().equals(value.toQtiString().trim());
+            } else {
+                result = mapKey.toQtiString().trim().equalsIgnoreCase(value.toQtiString().trim());
+            }
         }
         return result;
     }
