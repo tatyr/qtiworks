@@ -63,9 +63,14 @@ import uk.ac.ed.ph.jqtiplus.value.StringValue;
 import uk.ac.ed.ph.jqtiplus.value.TextFormat;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An extended text interaction is a blockInteraction that allows the
@@ -107,6 +112,10 @@ import java.util.regex.Pattern;
 public final class ExtendedTextInteraction extends BlockInteraction implements StringInteraction {
 
     private static final long serialVersionUID = 8382652026744422992L;
+
+    private static Logger logger = LoggerFactory.getLogger(ExtendedTextInteraction.class);
+
+    private static Pattern NON_WORD_PATTERN = Pattern.compile("\\W+");
 
     /** Name of this class in xml schema. */
     public static final String QTI_CLASS_NAME = "extendedTextInteraction";
@@ -418,7 +427,7 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
         final Integer maxStrings = getMaxStrings();
         final int minStrings = getMinStrings();
         final String patternMask = getPatternMask();
-        final int nonNullResponseStringCount = nonNullResponseStrings.size();
+        final int nonNullResponseStringCount = countWords(nonNullResponseStrings);
         if (nonNullResponseStringCount < minStrings) {
             /* NB: This covers both the list container case, and the special case
              * for single cardinality variables whereby minStrings==1 => non-empty value must be provided
@@ -439,4 +448,37 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
         return true;
     }
 
+    private int countWords(final List<SingleValue> nonNullResponseStrings) {
+    	int countWords = 0;
+    	boolean foundStrings = false;
+    	for(final SingleValue sValue:nonNullResponseStrings) {
+    		if(sValue instanceof StringValue) {
+    			countWords += countWords((StringValue)sValue);
+    			foundStrings = true;
+    		} else {
+    			countWords++;
+    		}
+    	}
+    	return foundStrings ? countWords : nonNullResponseStrings.size();
+    }
+
+    private int countWords(final StringValue stringValue) {
+    	int countWords = 0;
+    	final String string = stringValue.stringValue();
+    	if(string != null && string.length() > 0) {
+	    	try(final Scanner input = new Scanner(new StringReader(string))) {
+	    		input.useDelimiter(NON_WORD_PATTERN);
+			    while (input.hasNext()) {
+			        final String word = input.next();
+			        if(word.length() > 1) {
+			        	//counts each word bigger than 1 character
+			        	countWords++;
+			        }
+			    }
+	    	} catch(final Exception e) {
+	    		logger.error("Cannot count words of: " + string, e);
+	    	}
+    	}
+    	return countWords;
+    }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cp:manifest xmlns:cp="http://www.imsglobal.org/xsd/imscp_v1p1" identifier="SCENARIO">
+  <cp:resources>
+    <cp:resource identifier="assessment" type="imsqti_test_xmlv2p1" href="../outside.xml">
+      <cp:file href="../outside.xml"/>
+    </cp:resource>
+  </cp:resources>
+</cp:manifest>
