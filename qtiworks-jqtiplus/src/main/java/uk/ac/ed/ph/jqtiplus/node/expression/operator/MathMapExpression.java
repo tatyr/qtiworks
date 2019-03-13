@@ -44,6 +44,8 @@ import uk.ac.ed.ph.jqtiplus.value.NullValue;
 import uk.ac.ed.ph.jqtiplus.value.NumberValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
+import java.math.BigDecimal;
+
 /**
  * Convenience base class for expressions like <tt>sum</tt>, <tt>max</tt> that
  * are evaluated by "mapping" over their values in a certain way.
@@ -66,7 +68,7 @@ public abstract class MathMapExpression extends AbstractSimpleFunctionalExpressi
     @Override
     protected final Value evaluateValidSelf(final Value[] childValues) {
         BaseType baseType = BaseType.INTEGER;
-        double running = initialValue();
+        BigDecimal running = initialValue();
 
         for (final Value childValue : childValues) {
             if (childValue.isNull()) {
@@ -77,26 +79,26 @@ public abstract class MathMapExpression extends AbstractSimpleFunctionalExpressi
                 baseType = BaseType.FLOAT;
             }
             if (childValue.getCardinality().isSingle()) {
-                running = foldr(running, ((NumberValue) childValue).doubleValue());
+                running = foldr(running, BigDecimal.valueOf(((NumberValue) childValue).doubleValue()));
             }
             else {
                 final ListValue container = (ListValue) childValue;
                 for (int i = 0; i < container.size(); i++) {
-                    running = foldr(running, ((NumberValue) container.get(i)).doubleValue());
+                    running = foldr(running, BigDecimal.valueOf(((NumberValue) container.get(i)).doubleValue()));
                 }
             }
         }
 
-        return baseType.isInteger() ? new IntegerValue((int) running) : new FloatValue(running);
+        return baseType.isInteger() ? new IntegerValue(running.intValue()) : new FloatValue(running.doubleValue());
     }
 
     /** Subclasses should return the initial running "total" to use */
-    protected abstract double initialValue();
+    protected abstract BigDecimal initialValue();
 
     /**
      * Subclasses should fill in to "fold" the current running "total"
      * with a new "value"
      */
-    protected abstract double foldr(double running, double value);
+    protected abstract BigDecimal foldr(BigDecimal running, BigDecimal value);
 
 }

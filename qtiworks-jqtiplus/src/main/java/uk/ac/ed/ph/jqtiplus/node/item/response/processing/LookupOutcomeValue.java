@@ -117,7 +117,7 @@ public final class LookupOutcomeValue extends ProcessResponseValue {
                 targetValue = lookupTable.getDefaultValue();
             }
             else {
-                double valueAsDouble;
+            	double valueAsDouble;
                 if (value.getBaseType().isDuration()) {
                     valueAsDouble = ((DurationValue) value).doubleValue();
                 }

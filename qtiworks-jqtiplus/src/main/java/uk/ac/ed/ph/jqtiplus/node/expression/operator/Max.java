@@ -35,6 +35,8 @@ package uk.ac.ed.ph.jqtiplus.node.expression.operator;
 
 import uk.ac.ed.ph.jqtiplus.node.expression.ExpressionParent;
 
+import java.math.BigDecimal;
+
 /**
  * Implementation of <tt>max</tt>
  *
@@ -52,12 +54,12 @@ public final class Max extends MathMapExpression {
     }
 
     @Override
-    protected double initialValue() {
-        return Double.NEGATIVE_INFINITY;
+    protected BigDecimal initialValue() {
+        return BigDecimal.valueOf(Double.MIN_VALUE); // only a very small value
     }
 
     @Override
-    protected double foldr(final double running, final double value) {
-        return Math.max(running, value);
+    protected BigDecimal foldr(final BigDecimal running, final BigDecimal value) {
+        return running.max(value);
     }
 }

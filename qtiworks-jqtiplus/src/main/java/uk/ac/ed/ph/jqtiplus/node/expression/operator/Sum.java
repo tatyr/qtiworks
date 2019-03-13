@@ -35,6 +35,8 @@ package uk.ac.ed.ph.jqtiplus.node.expression.operator;
 
 import uk.ac.ed.ph.jqtiplus.node.expression.ExpressionParent;
 
+import java.math.BigDecimal;
+
 /**
  * The sum operator takes one or more sub-expressions which have single or multiple or ordered
  * cardinality (it is possible to mix different cardinalities) and have numerical base-types.
@@ -60,12 +62,12 @@ public final class Sum extends MathMapExpression {
     }
 
     @Override
-    protected double initialValue() {
-        return 0.0;
+    protected BigDecimal initialValue() {
+        return BigDecimal.ZERO;
     }
 
     @Override
-    protected double foldr(final double running, final double value) {
-        return running + value;
+    protected BigDecimal foldr(final BigDecimal running, final BigDecimal value) {
+        return running.add(value);
     }
 }

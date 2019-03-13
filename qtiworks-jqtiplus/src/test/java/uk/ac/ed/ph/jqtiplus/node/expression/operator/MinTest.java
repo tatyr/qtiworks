@@ -27,39 +27,64 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *
- * This software is derived from (and contains code from) QTItools and MathAssessEngine.
- * QTItools is (c) 2008, University of Southampton.
+ * This software is derived from (and contains code from) QTITools and MathAssessEngine.
+ * QTITools is (c) 2008, University of Southampton.
  * MathAssessEngine is (c) 2010, University of Edinburgh.
  */
 package uk.ac.ed.ph.jqtiplus.node.expression.operator;
 
-import uk.ac.ed.ph.jqtiplus.node.expression.ExpressionParent;
+import uk.ac.ed.ph.jqtiplus.value.FloatValue;
+import uk.ac.ed.ph.jqtiplus.value.IntegerValue;
+import uk.ac.ed.ph.jqtiplus.value.NumberValue;
+import uk.ac.ed.ph.jqtiplus.value.Value;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
- * Implementation of <tt>min</tt>
  *
- * @author David McKain
+ * @author Stéphane Rossé
  */
-public final class Min extends MathMapExpression {
+@RunWith(Parameterized.class)
+public class MinTest {
 
-    private static final long serialVersionUID = 226234156269457952L;
-
-    /** Name of this class in xml schema. */
-    public static final String QTI_CLASS_NAME = "min";
-
-    public Min(final ExpressionParent parent) {
-        super(parent, QTI_CLASS_NAME);
+    @Parameters()
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+        	{ new FloatValue(1.0d), new FloatValue[] {
+        			new FloatValue(1.0d), new FloatValue(3.0d)
+        		}
+        	},
+        	{ new FloatValue(3.999d), new FloatValue[] {
+        			new FloatValue(3.999d), new FloatValue(3.99999d)
+        		}
+        	},
+        	{ new IntegerValue(-10),  new IntegerValue[] {
+        			new IntegerValue(-10), new IntegerValue(5)
+        		}
+        	}
+        });
     }
 
-    @Override
-    protected BigDecimal initialValue() {
-        return BigDecimal.valueOf(Double.MAX_VALUE);// only a very big value
+    private final NumberValue result;
+    private final NumberValue[] values;
+
+    public MinTest(final NumberValue result, final NumberValue[] values) {
+    	this.result = result;
+    	this.values = values;
     }
 
-    @Override
-    protected BigDecimal foldr(final BigDecimal running, final BigDecimal value) {
-        return running.min(value);
-    }
+	@Test
+	public void min() {
+		final Min min = new Min(null);
+		final Value calculatedResult = min.evaluateValidSelf(values);
+		Assert.assertEquals(result, calculatedResult);
+	}
+
 }

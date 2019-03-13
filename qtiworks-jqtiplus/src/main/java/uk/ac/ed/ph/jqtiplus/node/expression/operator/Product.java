@@ -35,6 +35,8 @@ package uk.ac.ed.ph.jqtiplus.node.expression.operator;
 
 import uk.ac.ed.ph.jqtiplus.node.expression.ExpressionParent;
 
+import java.math.BigDecimal;
+
 /**
  * The product operator takes 1 or more sub-expressions which all have single cardinality and have
  * numerical base-types. The result is a single float or, if all sub-expressions are of integer type,
@@ -57,12 +59,12 @@ public final class Product extends MathMapExpression {
     }
 
     @Override
-    protected double initialValue() {
-        return 1.0;
+    protected BigDecimal initialValue() {
+        return BigDecimal.ONE;
     }
 
     @Override
-    protected double foldr(final double running, final double value) {
-        return running * value;
+    protected BigDecimal foldr(final BigDecimal running, final BigDecimal value) {
+        return running.multiply(value);
     }
 }
