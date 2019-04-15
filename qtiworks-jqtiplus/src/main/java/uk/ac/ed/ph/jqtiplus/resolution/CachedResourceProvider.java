@@ -42,11 +42,9 @@ import uk.ac.ed.ph.jqtiplus.provision.RootNodeHolder;
 import uk.ac.ed.ph.jqtiplus.provision.RootNodeProvider;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Helper class that caches the results of calls to {@link AssessmentObjectResolver} during
@@ -56,14 +54,12 @@ import org.slf4j.LoggerFactory;
  */
 final class CachedResourceProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(CachedResourceProvider.class);
-
     private final RootNodeProvider rootNodeProvider;
-    private final Map<URI, RootNodeLookup<?>> cacheData;
+    private final ConcurrentMap<URI, RootNodeLookup<?>> cacheData;
 
     public CachedResourceProvider(final RootNodeProvider rootNodeProvider) {
         this.rootNodeProvider = rootNodeProvider;
-        this.cacheData = new HashMap<URI, RootNodeLookup<?>>();
+        this.cacheData = new ConcurrentHashMap<>();
     }
 
     public RootNodeProvider getRootNodeProvider() {
@@ -77,27 +73,18 @@ final class CachedResourceProvider {
 
     @SuppressWarnings("unchecked")
     public <E extends RootNode> RootNodeLookup<E> getLookup(final URI systemId, final Class<E> resultClass) {
-        RootNodeLookup<E> frozenResult = (RootNodeLookup<E>) cacheData.get(systemId);
-        if (frozenResult!=null) {
-            /* Cache hit */
-            logger.debug("Resource cache hit for key {} yielded {}", systemId, frozenResult);
-        }
-        else {
-            /* Cache miss */
-            try {
+    	return (RootNodeLookup<E>) cacheData.computeIfAbsent(systemId, sId -> {
+    		try {
                 final RootNodeHolder<E> result = rootNodeProvider.lookupRootNode(systemId, resultClass);
-                frozenResult = new RootNodeLookup<E>(systemId, result);
+                return new RootNodeLookup<>(systemId, result);
             }
             catch (final BadResourceException e) {
-                frozenResult = new RootNodeLookup<E>(systemId, resultClass, e);
+                return new RootNodeLookup<>(systemId, resultClass, e);
             }
             catch (final ResourceNotFoundException e) {
-                frozenResult = new RootNodeLookup<E>(systemId, resultClass, e);
+                return new RootNodeLookup<>(systemId, resultClass, e);
             }
-            cacheData.put(systemId, frozenResult);
-            logger.debug("Resource cache miss for key {} stored {}", systemId, frozenResult);
-        }
-        return frozenResult;
+    	});
     }
 
     @Override
