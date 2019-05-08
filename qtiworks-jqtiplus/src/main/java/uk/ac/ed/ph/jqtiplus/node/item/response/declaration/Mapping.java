@@ -46,6 +46,7 @@ import uk.ac.ed.ph.jqtiplus.value.SingleValue;
 import uk.ac.ed.ph.jqtiplus.value.StringValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -177,13 +178,13 @@ public final class Mapping extends AbstractNode {
             }
             else if (responseDeclaration.getCardinality().isList()) {
                 /* Multiple cardinality => sum mapped values of unique items in container */
-                double sum = 0.0;
+                BigDecimal sum = BigDecimal.ZERO;
                 final ListValue sourceListValue = (ListValue) sourceValue;
-                final Set<SingleValue> uniqueValues = new HashSet<SingleValue>(sourceListValue.getAll());
+                final Set<SingleValue> uniqueValues = new HashSet<>(sourceListValue.getAll());
                 for (final SingleValue value : uniqueValues) {
-                    sum += mapSingleValue(value);
+                    sum = sum.add(BigDecimal.valueOf(mapSingleValue(value)));
                 }
-                return new FloatValue(applyConstraints(sum));
+                return new FloatValue(applyConstraints(sum.doubleValue()));
             }
         }
         return new FloatValue(applyConstraints(getDefaultValue()));
