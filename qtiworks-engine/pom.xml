@@ -9,7 +9,7 @@ All Rights Reserved
   <modelVersion>4.0.0</modelVersion>
   <name>QTIWorks Delivery Engine</name>
   <artifactId>qtiworks-engine</artifactId>
-  <version>1.0-.15</version>
+  <version>1.0.15</version>
   <packaging>war</packaging>
   <parent>
     <groupId>org.openolat.qtiworks</groupId>
