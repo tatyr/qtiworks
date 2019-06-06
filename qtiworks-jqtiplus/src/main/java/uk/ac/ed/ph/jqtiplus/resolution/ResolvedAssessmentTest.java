@@ -72,6 +72,9 @@ public final class ResolvedAssessmentTest extends ResolvedAssessmentObject<Asses
 
     /** Maps resolved System ID to applicable {@link AssessmentItemRef} */
     private final Map<URI, List<AssessmentItemRef>> itemRefsBySystemIdMap;
+    
+    /** Maps resolved Identifier to applicable {@link AssessmentItemRef} */
+    private final Map<Identifier, AssessmentItemRef> itemRefsByIdentifiers;
 
     /** {@link ResolvedAssessmentItem} for each unique item System ID. */
     private final Map<URI, ResolvedAssessmentItem> resolvedAssessmentItemBySystemIdMap;
@@ -80,12 +83,14 @@ public final class ResolvedAssessmentTest extends ResolvedAssessmentObject<Asses
             final List<AssessmentItemRef> assessmentItemRefs,
             final Map<AssessmentItemRef, URI> systemIdByItemRefMap,
             final Map<URI, List<AssessmentItemRef>> itemRefsBySystemIdMap,
+            final Map<Identifier, AssessmentItemRef> itemRefsByIdentifiers,
             final Map<URI, ResolvedAssessmentItem> resolvedAssessmentItemMap) {
         super(testLookup);
         this.testLookup = testLookup;
         this.assessmentItemRefs = Collections.unmodifiableList(assessmentItemRefs);
         this.systemIdByItemRefMap = Collections.unmodifiableMap(systemIdByItemRefMap);
         this.itemRefsBySystemIdMap = Collections.unmodifiableMap(itemRefsBySystemIdMap);
+        this.itemRefsByIdentifiers = Collections.unmodifiableMap(itemRefsByIdentifiers);
         this.resolvedAssessmentItemBySystemIdMap = Collections.unmodifiableMap(resolvedAssessmentItemMap);
     }
 
@@ -108,6 +113,10 @@ public final class ResolvedAssessmentTest extends ResolvedAssessmentObject<Asses
 
     public Map<URI, List<AssessmentItemRef>> getItemRefsBySystemIdMap() {
         return itemRefsBySystemIdMap;
+    }
+    
+    public Map<Identifier, AssessmentItemRef> getItemRefsByIdentifierMap() {
+        return itemRefsByIdentifiers;
     }
 
     @ObjectDumperOptions(DumpMode.TO_STRING)

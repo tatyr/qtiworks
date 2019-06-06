@@ -33,14 +33,6 @@
  */
 package uk.ac.ed.ph.jqtiplus.resolution;
 
-import uk.ac.ed.ph.jqtiplus.node.RootNode;
-import uk.ac.ed.ph.jqtiplus.node.item.AssessmentItem;
-import uk.ac.ed.ph.jqtiplus.node.item.response.processing.ResponseProcessing;
-import uk.ac.ed.ph.jqtiplus.node.test.AssessmentItemRef;
-import uk.ac.ed.ph.jqtiplus.node.test.AssessmentTest;
-import uk.ac.ed.ph.jqtiplus.provision.RootNodeProvider;
-import uk.ac.ed.ph.jqtiplus.utils.QueryUtils;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +42,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.ac.ed.ph.jqtiplus.node.RootNode;
+import uk.ac.ed.ph.jqtiplus.node.item.AssessmentItem;
+import uk.ac.ed.ph.jqtiplus.node.item.response.processing.ResponseProcessing;
+import uk.ac.ed.ph.jqtiplus.node.test.AssessmentItemRef;
+import uk.ac.ed.ph.jqtiplus.node.test.AssessmentTest;
+import uk.ac.ed.ph.jqtiplus.provision.RootNodeProvider;
+import uk.ac.ed.ph.jqtiplus.types.Identifier;
+import uk.ac.ed.ph.jqtiplus.utils.QueryUtils;
 
 /**
  * Performs "resolution" of an {@link AssessmentItem} or {@link AssessmentTest}, using
@@ -153,6 +154,7 @@ public final class AssessmentObjectResolver {
         final List<AssessmentItemRef> assessmentItemRefs = new ArrayList<AssessmentItemRef>();
         final Map<AssessmentItemRef, URI> systemIdByItemRefMap = new HashMap<AssessmentItemRef, URI>();
         final Map<URI, List<AssessmentItemRef>> itemRefsBySystemIdMap = new HashMap<URI, List<AssessmentItemRef>>();
+        final Map<Identifier, AssessmentItemRef> itemRefsByIdentifiers = new ConcurrentHashMap<Identifier, AssessmentItemRef>();
         final Map<URI, ResolvedAssessmentItem> resolvedAssessmentItemMap = new ConcurrentHashMap<URI, ResolvedAssessmentItem>();
 
         /* Look up test */
@@ -172,6 +174,7 @@ public final class AssessmentObjectResolver {
                         itemRefsBySystemIdMap.put(itemSystemId, itemRefs);
                     }
                     itemRefs.add(itemRef);
+                    itemRefsByIdentifiers.put(itemRef.getIdentifier(), itemRef);
                 }
             }
 
@@ -187,7 +190,7 @@ public final class AssessmentObjectResolver {
             }*/
         }
         return new ResolvedAssessmentTest(testLookup, assessmentItemRefs,
-                systemIdByItemRefMap, itemRefsBySystemIdMap, resolvedAssessmentItemMap);
+                systemIdByItemRefMap, itemRefsBySystemIdMap, itemRefsByIdentifiers, resolvedAssessmentItemMap);
     }
 
     //-------------------------------------------------------------------
