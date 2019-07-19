@@ -58,6 +58,17 @@ public class ToleranceModeTest {
                 { ToleranceMode.EXACT, 14.923d, -14.923d, 0d, 0d, false, false, false },
                 { ToleranceMode.EXACT, 14.915d, 14.9150000d, 0d, 0d, false, false, true },
                 { ToleranceMode.EXACT, 1.23e-2d, 0.0123d, 0d, 0d, false, false, true },
+                
+                { ToleranceMode.RELATIVE, 177.5, 177.5, 2d, 2d, true, true, true },
+                { ToleranceMode.RELATIVE, 100, 98, 2d, 2d, false, false, false },
+                { ToleranceMode.RELATIVE, 100, 98, 2d, 2d, true, true, true },
+                { ToleranceMode.RELATIVE, -177.5, -177.4, 2d, 2d, true, true, true },
+                { ToleranceMode.RELATIVE, -177.5, -178.8, 2d, 2d, true, true, true },
+                { ToleranceMode.RELATIVE, -177.5, -176.1, 2d, 2d, true, true, true },
+                { ToleranceMode.RELATIVE, -177.5, -170.4, 2d, 2d, true, true, false },
+                { ToleranceMode.RELATIVE, -177.5, -170.4, 2d, 2d, false, false, false },
+                { ToleranceMode.RELATIVE, -100, -102, 2d, 2d, false, false, false },
+                { ToleranceMode.RELATIVE, -100, -102, 2d, 2d, true, true, true },
 
                 { ToleranceMode.ABSOLUTE, 14.923d, 14.916d, 0.008d, 0.002d, true, true, true },
                 { ToleranceMode.ABSOLUTE, 14.923d, 14.914d, 0.008d, 0.002d, true, true, false },

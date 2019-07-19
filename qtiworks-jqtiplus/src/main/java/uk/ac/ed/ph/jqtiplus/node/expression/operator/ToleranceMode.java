@@ -106,16 +106,23 @@ public enum ToleranceMode implements Stringifiable {
 
         @Override
         public boolean isEqual(final double firstNumber, final double secondNumber,
-                final double tolerance1, final double tolerance2,
+                double tolerance1, double tolerance2,
                 final boolean includeLowerBound, final boolean includeUpperBound) {
-            final double lower = firstNumber * (1 - tolerance1 / 100);
+        	tolerance1 = Math.abs(tolerance1);
+        	tolerance2 = Math.abs(tolerance2);
+            double lower = firstNumber * (1 - tolerance1 / 100);
+            double upper = firstNumber * (1 + tolerance2 / 100);
+            
+            if(lower > upper) {
+            	double switchBounds = lower;
+            	lower = upper;
+            	upper = switchBounds;
+            }
 
             if (includeLowerBound && secondNumber < lower ||
                     !includeLowerBound && secondNumber <= lower) {
                 return false;
             }
-
-            final double upper = firstNumber * (1 + tolerance2 / 100);
 
             if (includeUpperBound && secondNumber > upper ||
                     !includeUpperBound && secondNumber >= upper) {
@@ -156,7 +163,7 @@ public enum ToleranceMode implements Stringifiable {
      * @param includeUpperBound accept upper boundary
      * @return true if given numbers are equal; false otherwise
      */
-    public abstract boolean isEqual(double firstNumber, double secondNumber, double tolerance1, double tolerance2,
+	public abstract boolean isEqual(double firstNumber, double secondNumber, double tolerance1, double tolerance2,
             boolean includeLowerBound, boolean includeUpperBound);
 
     @Override
