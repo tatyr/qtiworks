@@ -3,3 +3,4 @@
 /user-import.csv
 /dependency-reduced-pom.xml
 /postgresql*jdbc*
+/.settings/

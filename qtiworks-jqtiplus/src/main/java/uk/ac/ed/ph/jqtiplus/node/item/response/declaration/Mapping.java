@@ -35,6 +35,7 @@ package uk.ac.ed.ph.jqtiplus.node.item.response.declaration;
 
 import uk.ac.ed.ph.jqtiplus.attribute.value.FloatAttribute;
 import uk.ac.ed.ph.jqtiplus.group.item.response.declaration.MapEntryGroup;
+import uk.ac.ed.ph.jqtiplus.internal.util.StringUtilities;
 import uk.ac.ed.ph.jqtiplus.node.AbstractNode;
 import uk.ac.ed.ph.jqtiplus.node.expression.general.MapResponse;
 import uk.ac.ed.ph.jqtiplus.validation.ValidationContext;
@@ -224,9 +225,9 @@ public final class Mapping extends AbstractNode {
         }
         if(!result && mapKey instanceof StringValue && value instanceof StringValue) {
         	if (mapEntry.getCaseSensitive()) {
-                result = mapKey.toQtiString().trim().equals(value.toQtiString().trim());
+                result = StringUtilities.trim(mapKey.toQtiString()).equals(StringUtilities.trim(value.toQtiString()));
             } else {
-                result = mapKey.toQtiString().trim().equalsIgnoreCase(value.toQtiString().trim());
+                result = StringUtilities.trim(mapKey.toQtiString()).equalsIgnoreCase(StringUtilities.trim(value.toQtiString()));
             }
         }
         return result;

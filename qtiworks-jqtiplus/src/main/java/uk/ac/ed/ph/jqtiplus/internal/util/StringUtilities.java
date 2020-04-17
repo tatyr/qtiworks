@@ -316,4 +316,13 @@ public final class StringUtilities {
         }
         return builder.toString();
     }
+    
+    public static final String trim(String string) {
+    	if(string == null) return null;
+    	
+    	string = string.replace('\u00A0', ' ');
+    	string = string.replace('\u2007', ' ');
+    	string = string.replace('\u202F', ' ');
+    	return string.trim();
+    }
 }

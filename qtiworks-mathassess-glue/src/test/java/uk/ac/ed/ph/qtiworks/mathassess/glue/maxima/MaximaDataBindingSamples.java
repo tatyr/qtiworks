@@ -33,7 +33,9 @@
  */
 package uk.ac.ed.ph.qtiworks.mathassess.glue.maxima;
 
-import uk.ac.ed.ph.qtiworks.mathassess.glue.maxima.MaximaDataBinder;
+import java.util.Arrays;
+import java.util.Collection;
+
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.BooleanMultipleValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.BooleanOrderedValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.BooleanValueWrapper;
@@ -47,9 +49,6 @@ import uk.ac.ed.ph.qtiworks.mathassess.glue.types.StringMultipleValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.StringOrderedValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.StringValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.WrapperUtilities;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Samples to use for various tests of {@link MaximaDataBinder}.
