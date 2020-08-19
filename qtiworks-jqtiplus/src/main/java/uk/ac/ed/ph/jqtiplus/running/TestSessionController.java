@@ -129,7 +129,7 @@ public final class TestSessionController extends TestProcessingController {
 
     private static final Logger logger = LoggerFactory.getLogger(TestSessionController.class);
 
-
+    private Date currentRequestTimestamp;
 
     public TestSessionController(final JqtiExtensionManager jqtiExtensionManager,
             final TestSessionControllerSettings testSessionControllerSettings,
@@ -206,11 +206,28 @@ public final class TestSessionController extends TestProcessingController {
         /* Mark test session as initialized */
         testSessionState.setInitialized(true);
     }
+    
+    /**
+	 * @return the currentRequestTimestamp
+	 */
+	public Date getCurrentRequestTimestamp() {
+		return currentRequestTimestamp;
+	}
+
+	/**
+	 * @param currentRequestTimestamp the currentRequestTimestamp to set
+	 */
+	public void setCurrentRequestTimestamp(Date currentRequestTimestamp) {
+		// don't replace a time stamp older than the current one, always increase it
+		if(this.currentRequestTimestamp != null && currentRequestTimestamp != null
+				&& currentRequestTimestamp.before(this.currentRequestTimestamp)) return;
+		this.currentRequestTimestamp = currentRequestTimestamp;
+	}
 
     //-------------------------------------------------------------------
     // High level test navigation - test entry, flow through testParts then exit
 
-    /**
+	/**
      * Updates the {@link TestSessionState} to indicate that the test has
      * been entered. Returns the number {@link TestPart}s in the test.
      * The caller would be expected to call {@link #enterNextAvailableTestPart(Date)}
