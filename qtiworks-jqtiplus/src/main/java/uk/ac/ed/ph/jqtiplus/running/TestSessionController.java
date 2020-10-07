@@ -985,7 +985,7 @@ public final class TestSessionController extends TestProcessingController {
         final TestPlanNode currentItemRefNode = getCurrentItemRefNode();
         if (currentItemRefNode!=null) {
             final ItemSessionState currentItemSessionState = expectItemRefState(currentItemRefNode);
-            if (!currentItemSessionState.isEnded()) {
+            if (!currentItemSessionState.isEnded() && !currentItemSessionState.isSuspended()) {
                 getItemSessionController(currentItemRefNode).suspendItemSession(timestamp);
             }
             for (final TestPlanNode sectionNode : currentItemRefNode.searchAncestors(TestNodeType.ASSESSMENT_SECTION)) {
