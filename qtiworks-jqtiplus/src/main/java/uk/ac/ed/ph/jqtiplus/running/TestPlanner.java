@@ -80,6 +80,8 @@ public final class TestPlanner extends ListenerNotificationFirer {
 
     private static final Logger logger = LoggerFactory.getLogger(TestPlanner.class);
 
+    private final Random random = new Random();
+
     /** Private class used to build up a temporary tree structure below {@link TestPart}s. */
     private static class BuildTreeNode {
 
@@ -359,7 +361,6 @@ public final class TestPlanner extends ListenerNotificationFirer {
         /* Now decide how many selections to make from remaining children */
         final int remainingSelections = requestedSelections - requiredChildCount;
         if (remainingSelections > 0) {
-            final Random random = new Random(System.currentTimeMillis());
             if (selection.getWithReplacement()) {
                 /* Selection with replacement */
                 for (int i=0; i<remainingSelections; i++) {
@@ -424,7 +425,7 @@ public final class TestPlanner extends ListenerNotificationFirer {
         }
 
         /* Perform shuffle */
-        Collections.shuffle(toShuffle);
+        Collections.shuffle(toShuffle, random);
 
         /* Merge the shuffled items in */
         final List<BuildTreeNode> afterShuffle = new ArrayList<BuildTreeNode>();
