@@ -33,6 +33,7 @@
  */
 package uk.ac.ed.ph.qtiworks.config;
 
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import uk.ac.ed.ph.qtiworks.config.beans.QtiWorksDeploymentSettings;
 import uk.ac.ed.ph.qtiworks.mathassess.MathAssessExtensionPackage;
 import uk.ac.ed.ph.qtiworks.services.RequestTimestampContext;
@@ -56,7 +57,6 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.hibernate.ejb.HibernatePersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -119,7 +119,7 @@ public class ServicesConfiguration {
     @Bean
     public LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean() {
         final LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setPersistenceProviderClass(HibernatePersistence.class);
+        emf.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         emf.setDataSource(dataSource());
         emf.setJpaProperties(jpaProperties());
         emf.setPackagesToScan("uk.ac.ed.ph.qtiworks.domain.entities");
